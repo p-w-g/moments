@@ -5,12 +5,12 @@
  defined on <html> by the selected theme class.
 ==================================================================== -->
 <script>
-	import ThemeToggle from './ThemeToggle.svelte';
+	// import ThemeToggle from './ThemeToggle.svelte';
 	export let current = '/'; // active path for aria-current
 </script>
 
 <header class="navbar" role="navigation" aria-label="Site">
-	<a href="/" class="brand">moments<span class="dot">.</span>exposed</a>
+	<a href="/" class="brand">moments</a>
 
 	<nav class="links">
 		<!-- <a href="/moments" class:selected={current.startsWith('/moments')}>Moments</a>
