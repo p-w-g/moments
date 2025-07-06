@@ -13,8 +13,8 @@
 	<a href="/" class="brand">moments</a>
 
 	<nav class="links">
-		<!-- <a href="/moments" class:selected={current.startsWith('/moments')}>Moments</a>
-		<a href="/highlights" class:selected={current.startsWith('/highlights')}>Highlights</a>
+		<a href="/moments" class:selected={current.startsWith('/moments')}>Moments</a>
+		<!-- <a href="/highlights" class:selected={current.startsWith('/highlights')}>Highlights</a>
 		<a href="/whoami" class:selected={current.startsWith('/whoami')}>$WhoAmI</a> -->
 		<!-- <ThemeToggle class="toggle" /> -->
 	</nav>
