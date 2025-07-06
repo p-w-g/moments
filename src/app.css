@@ -302,3 +302,9 @@ h1 {
 		}
 	}
 }
+
+article {
+	max-width: 68ch; /* ≈ 60–75 chars on most fonts */
+	margin-inline: auto; /* centres on large screens   */
+	padding-inline: 1rem; /* 16 px gutter on mobiles     */
+}

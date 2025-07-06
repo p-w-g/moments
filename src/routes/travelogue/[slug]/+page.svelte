@@ -5,7 +5,7 @@
 	export let data: { post: any };
 </script>
 
-<article class="prose max-w-none mx-auto">
+<article class="prose mx-auto px-4">
 	<h2>{data.post.title}</h2>
 
 	<!--  iterate over every block in post.body  -->
@@ -13,6 +13,7 @@
 		{#if chunk._type === 'image'}
 			<!-- 📷  inline-image block -->
 			<PortableImage value={chunk} />
+			<br />
 		{:else}
 			<!-- 📝  any non-image block (paragraph, h2, list, …) -->
 			<!-- PortableText wants an *array*, so wrap the single chunk -->
