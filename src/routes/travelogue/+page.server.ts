@@ -1,4 +1,3 @@
-// src/routes/moments/+page.server.ts
 import { client } from '$lib/sanity';
 import type { PageServerLoad } from './$types';
 

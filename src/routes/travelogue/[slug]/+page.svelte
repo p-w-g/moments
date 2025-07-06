@@ -3,18 +3,10 @@
 	import { PortableText } from '@portabletext/svelte';
 
 	export let data: { post: any };
-	console.log(data.post);
 </script>
 
 <article class="prose max-w-none mx-auto">
-	<h1>{data.post.title}</h1>
-
-	<!-- <PortableText
-		value={data.post.body}
-		components={{
-			types: { image: PortableImage }
-		}}
-	/> -->
+	<h2>{data.post.title}</h2>
 
 	<!--  iterate over every block in post.body  -->
 	{#each data.post.body as chunk (chunk._key)}
