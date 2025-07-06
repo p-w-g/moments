@@ -12,7 +12,6 @@ const query = `
 `;
 export const load: PageServerLoad = async ({ params }) => {
 	const post = await client.fetch(query, { slug: params.slug });
-	console.log(post);
 	if (!post) throw error(404, 'Post not found');
 	return { post };
 };
