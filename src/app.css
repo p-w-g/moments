@@ -308,3 +308,7 @@ article {
 	margin-inline: auto; /* centres on large screens   */
 	padding-inline: 1rem; /* 16 px gutter on mobiles     */
 }
+
+ul {
+	list-style: none;
+}
