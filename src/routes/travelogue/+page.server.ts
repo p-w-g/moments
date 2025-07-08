@@ -41,8 +41,6 @@ export const load: PageServerLoad = async ({ url }) => {
 	const where = filters.length ? `*[_type=="post" && ${filters.join(' && ')}]` : '*[_type=="post"]';
 
 	const postsQuery = `${where}|order(publishedAt desc){${postFields}}`;
-	console.log('GROQ:\n', postsQuery);
-	console.log('PARAMS:', params);
 
 	const posts = await client.fetch(postsQuery, params);
 
