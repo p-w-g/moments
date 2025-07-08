@@ -18,7 +18,7 @@
 			src={urlFor(data.emotion.image).url()}
 			alt={data.emotion.image.alt ?? ''}
 			class="rounded-lg my-4"
-		/>
+		/> <br />
 	{/if}
 
 	{#if data.emotion.notes}
