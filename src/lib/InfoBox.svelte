@@ -5,17 +5,17 @@
 
 <aside class="border rounded-lg p-4 mb-6 text-sm bg-surface/40">
 	<p>⏱️ {post.readingMins}-min read</p>
-
-	{#if post.chapter}
+	{#if post.indexInChapter && post.chapterTotal}
 		<p>
+			📖 Moment {post.indexInChapter} of {post.chapterTotal}
+			in chapter&nbsp;
 			<a href={`/travelogue?chapter=${post.chapter.slug}`} class="underline">
 				{post.chapter.title}
 			</a>
 		</p>
 	{/if}
 
-	<!-- nav within chapter -->
-	{#if nav}
+	<!-- {#if nav}
 		<div class="flex justify-between mt-4">
 			{#if nav.prev}
 				<a href={`/travelogue/${nav.prev.slug}`} class="button">← {nav.prev.title}</a>
@@ -24,5 +24,5 @@
 				<a href={`/travelogue/${nav.next.slug}`} class="button ml-auto">{nav.next.title} →</a>
 			{/if}
 		</div>
-	{/if}
+	{/if} -->
 </aside>

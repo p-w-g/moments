@@ -13,7 +13,20 @@ const postQuery = `
         "slug": slug.current
       }
   },
-  tags
+  tags,
+    "indexInChapter":
+    1 + count(*[
+      _type=="post"
+      && chapter._ref == ^.chapter._ref
+      && publishedAt < ^.publishedAt   
+    ]),
+    "chapterTotal":
+    count(*[
+      _type=="post"
+      && chapter._ref == ^.chapter._ref
+    ]),
+
+  chapter->{ title, "slug": slug.current }
 }`;
 
 const navQuery = `
