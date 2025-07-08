@@ -27,10 +27,10 @@
 
 	<nav class="mt-8 flex justify-between text-sm">
 		{#if data.navLinks.earlier}
-			<a class="button" href={`/emotions/${data.navLinks.earlier.slug}`}> ← earlier </a>
+			<a class="button" href={`/emotions/${data.navLinks.earlier.slug}`}> ← Older </a>
 		{/if}
 		{#if data.navLinks.later}
-			<a class="button ml-auto" href={`/emotions/${data.navLinks.later.slug}`}> later → </a>
+			<a class="button ml-auto" href={`/emotions/${data.navLinks.later.slug}`}> Newer → </a>
 		{/if}
 	</nav>
 </article>
