@@ -1,29 +1,12 @@
 import { client } from '$lib/sanity';
 import type { PageServerLoad } from './$types';
 
-const postsQuery = `
-  *[_type == "post"]
-  | order(publishedAt desc){
-    title,
-    "slug": slug.current,
-    publishedAt,
-    tags,
-    chapter->{title,"slug":slug.current},
-    "book": chapter->book->{title, "slug": slug.current}
-    }
-  `;
-
 const allChaptersQuery = `
   *[_type=="chapter"]|order(title asc){
     title,
     "slug": slug.current
   }
 `;
-// export const load: PageServerLoad = async () => {
-// 	const posts = await client.fetch(postsQuery);
-// 	console.log(posts);
-// 	return { posts };
-// };
 
 const postFields = `
   title,
@@ -58,6 +41,8 @@ export const load: PageServerLoad = async ({ url }) => {
 	const where = filters.length ? `*[_type=="post" && ${filters.join(' && ')}]` : '*[_type=="post"]';
 
 	const postsQuery = `${where}|order(publishedAt desc){${postFields}}`;
+	console.log('GROQ:\n', postsQuery);
+	console.log('PARAMS:', params);
 
 	const posts = await client.fetch(postsQuery, params);
 
