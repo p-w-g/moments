@@ -8,7 +8,7 @@
 
 	{#if post.chapter}
 		<p>
-			<a href={`/moments?chapter=${post.chapter.slug}`} class="underline">
+			<a href={`/travelogue?chapter=${post.chapter.slug}`} class="underline">
 				{post.chapter.title}
 			</a>
 		</p>
@@ -18,10 +18,10 @@
 	{#if nav}
 		<div class="flex justify-between mt-4">
 			{#if nav.prev}
-				<a href={`/moments/${nav.prev.slug}`} class="button">← {nav.prev.title}</a>
+				<a href={`/travelogue/${nav.prev.slug}`} class="button">← {nav.prev.title}</a>
 			{/if}
 			{#if nav.next}
-				<a href={`/moments/${nav.next.slug}`} class="button ml-auto">{nav.next.title} →</a>
+				<a href={`/travelogue/${nav.next.slug}`} class="button ml-auto">{nav.next.title} →</a>
 			{/if}
 		</div>
 	{/if}
