@@ -1,23 +1,73 @@
 import { client } from '$lib/sanity';
 import type { PageServerLoad } from './$types';
 
-const query = `
+const postsQuery = `
   *[_type == "post"]
-    | order(publishedAt desc){
-      title,
-      "slug": slug.current,
-      publishedAt,
-      tags,
-
-      // bring chapter fields
-      chapter->{title, "slug": slug.current},
-
-      // hop to chapter, then to its book, and alias the result as book
-      "book": chapter->book->{title, "slug": slug.current}
+  | order(publishedAt desc){
+    title,
+    "slug": slug.current,
+    publishedAt,
+    tags,
+    chapter->{title,"slug":slug.current},
+    "book": chapter->book->{title, "slug": slug.current}
     }
+  `;
+
+const allChaptersQuery = `
+  *[_type=="chapter"]|order(title asc){
+    title,
+    "slug": slug.current
+  }
+`;
+// export const load: PageServerLoad = async () => {
+// 	const posts = await client.fetch(postsQuery);
+// 	console.log(posts);
+// 	return { posts };
+// };
+
+const postFields = `
+  title,
+  "slug": slug.current,
+  publishedAt,
+  tags,
+  chapter->{title,"slug":slug.current},
+  "book": chapter->book->{title, "slug": slug.current}
 `;
 
-export const load: PageServerLoad = async () => {
-	const posts = await client.fetch(query);
-	return { posts };
+export const load: PageServerLoad = async ({ url }) => {
+	/* fetch chapters FIRST – independent of filters */
+	const chapters = await client.fetch(allChaptersQuery);
+
+	/* read filters from query-string */
+	const tag = url.searchParams.get('tag');
+	const chapter = url.searchParams.get('chapter');
+
+	/* build posts WHERE clause only if needed */
+	const filters: string[] = [];
+	const params: Record<string, string> = {};
+
+	if (tag) {
+		filters.push('$tag in tags');
+		params.tag = tag;
+	}
+	if (chapter) {
+		filters.push('chapter->slug.current == $chapter');
+		params.chapter = chapter;
+	}
+
+	const where = filters.length ? `*[_type=="post" && ${filters.join(' && ')}]` : '*[_type=="post"]';
+
+	const postsQuery = `${where}|order(publishedAt desc){${postFields}}`;
+
+	const posts = await client.fetch(postsQuery, params);
+
+	/* unique tags for the other dropdown */
+	const tags = await client.fetch('array::unique(*[_type=="post"].tags[])');
+
+	return {
+		posts,
+		chapters, // ← from the independent query
+		tags,
+		active: { tag, chapter }
+	};
 };
