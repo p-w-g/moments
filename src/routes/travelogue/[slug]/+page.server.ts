@@ -5,7 +5,15 @@ const postQuery = `
 *[_type=="post" && slug.current==$slug][0]{
   ...,                            
   "readingMins": round(length(pt::text(body))/5/180),
-  series->{title,"slug":slug.current}
+  chapter->{
+      title,
+      "slug": slug.current,
+      book->{
+        title,
+        "slug": slug.current
+      }
+  },
+  tags
 }`;
 
 const navQuery = `
@@ -30,4 +38,3 @@ export const load = async ({ params }) => {
 	}
 	return { post, nav };
 };
-
