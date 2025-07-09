@@ -15,7 +15,7 @@
 	{#each highlights as h}
 		<a class="block w-80 max-w-full" href={`/highlights/${h.slug}`}>
 			<img
-				src={urlFor(h.image).width(800).height(600).fit('crop').auto('format').url()}
+				src={urlFor(h.image).width(150).height(150).fit('crop').auto('format').url()}
 				alt={h.title}
 				class="w-full h-auto rounded-lg shadow"
 			/>

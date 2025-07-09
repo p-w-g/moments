@@ -3,7 +3,7 @@
 	import { urlFor } from '$lib/sanity';
 </script>
 
-<h1 class="text-2xl mb-4">{data.highlight.title}</h1>
+<h2 class="text-2xl mb-4">{data.highlight.title}</h2>
 
 <picture>
 	<source
