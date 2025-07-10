@@ -29,6 +29,10 @@
 	/* Motion */
 	--ease-default: cubic-bezier(0.4, 0, 0.2, 1);
 	--transition-fast: 0.2s var(--ease-default);
+
+	/* highlights and moments */
+	--measure: 68ch; /* prose width */
+	--picture-max: calc(var(--measure) * 2); /* ≈ 88ch */
 }
 
 /* 3. Theme palettes --------------------------------------------------------- */
@@ -147,7 +151,6 @@ a:focus {
 	background: var(--color-accent);
 	color: #fff;
 	border: none;
-	border-radius: 4px;
 	font-weight: 500;
 	cursor: pointer;
 	transition:
@@ -163,7 +166,6 @@ a:focus {
 .card {
 	background: var(--color-surface);
 	border: 1px solid var(--color-border);
-	border-radius: 8px;
 	padding: 1.5rem;
 	transition:
 		box-shadow var(--transition-fast),
@@ -248,7 +250,6 @@ h1 {
 	height: 64px;
 	backdrop-filter: blur(10px) saturate(180%);
 	background: var(--color-navbar-bg, rgba(255, 255, 255, 0.6));
-	border-bottom: 1px solid var(--color-border, #e0e0e0);
 	z-index: 1000;
 
 	.brand {
@@ -292,7 +293,6 @@ h1 {
 		bottom: -4px;
 		height: 2px;
 		background: var(--color-accent, #d95f02);
-		border-radius: 1px;
 	}
 
 	/* narrow screens */
@@ -305,10 +305,66 @@ h1 {
 
 article {
 	max-width: 68ch; /* ≈ 60–75 chars on most fonts */
-	margin-inline: auto; /* centres on large screens   */
-	padding-inline: 1rem; /* 16 px gutter on mobiles     */
+	margin-inline: auto; /* centres on large screens */
+	padding-inline: 1rem; /* 16 px gutter on mobiles */
 }
 
 ul {
 	list-style: none;
+}
+
+.content {
+	width: min(90vw, var(--measure));
+	margin-inline: auto; /* centres prose */
+	padding-inline: 1rem; /* breathing room on phones */
+}
+/* ---------- parent wrapper -------------------------------- */
+.highlight-layout {
+	display: grid;
+	gap: 2rem;
+	align-items: start; /* top-align the meta */
+	max-width: 1400px; /* optional centre cap */
+	margin-inline: auto;
+	padding-inline: 1rem;
+}
+
+/* ---------- image column ---------------------------------- */
+.highlight-layout figure {
+	height: 87vh; /* headline requirement */
+	margin: 0; /* kill default */
+	margin: auto;
+}
+
+.highlight-layout figure img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* crop if needed */
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- meta column ----------------------------------- */
+.meta h1 {
+	margin: 0 0 0.75rem;
+}
+.meta p {
+	margin: 0 0 1rem;
+	line-height: 1.45;
+}
+.meta ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.meta li + li {
+	margin-top: 0.25rem;
+}
+
+/* ---------- responsive switch ----------------------------- */
+@media (max-width: 900px) {
+	.highlight-layout {
+		grid-template-columns: 1fr; /* stack */
+	}
+	.highlight-layout figure {
+		height: 60vh; /* give phones room */
+	}
 }

@@ -14,8 +14,8 @@
 
 	<nav class="links">
 		<a href="/travelogue" class:selected={current.startsWith('/travelogue')}>Travelogue</a>
-		<!-- <a href="/highlights" class:selected={current.startsWith('/highlights')}>Highlights</a>
-		<a href="/whoami" class:selected={current.startsWith('/whoami')}>$WhoAmI</a> -->
+		<a href="/highlights" class:selected={current.startsWith('/highlights')}>Highlights</a>
+		<!-- <a href="/whoami" class:selected={current.startsWith('/whoami')}>$WhoAmI</a> -->
 		<!-- <ThemeToggle class="toggle" /> -->
 	</nav>
 </header>

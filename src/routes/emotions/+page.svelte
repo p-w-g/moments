@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { urlFor } from '$lib/sanity';
 	export let data;
 </script>
 
