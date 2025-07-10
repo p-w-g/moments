@@ -12,17 +12,18 @@
 			<a href={`/travelogue?chapter=${post.chapter.slug}`} class="underline">
 				{post.chapter.title}
 			</a>
+			<br />
+			{#if nav}
+				{#if nav.prev}
+					<a href={`/travelogue/${nav.prev.slug}`}>← {nav.prev.title}</a>
+				{/if}
+				{#if nav.prev && nav.next}
+					|
+				{/if}
+				{#if nav.next}
+					<a href={`/travelogue/${nav.next.slug}`}>{nav.next.title} →</a>
+				{/if}
+			{/if}
 		</p>
 	{/if}
-
-	<!-- {#if nav}
-		<div class="flex justify-between mt-4">
-			{#if nav.prev}
-				<a href={`/travelogue/${nav.prev.slug}`} class="button">← {nav.prev.title}</a>
-			{/if}
-			{#if nav.next}
-				<a href={`/travelogue/${nav.next.slug}`} class="button ml-auto">{nav.next.title} →</a>
-			{/if}
-		</div>
-	{/if} -->
 </aside>

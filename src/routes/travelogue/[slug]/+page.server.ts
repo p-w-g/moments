@@ -41,13 +41,16 @@ export const load = async ({ params }) => {
 	if (!post) throw error(404, 'Not found');
 
 	let nav = null;
-	if (post.series) {
-		const list = await client.fetch(navQuery, { seriesSlug: post.series.slug });
+
+	if (post.chapter) {
+		const list = await client.fetch(navQuery, { chapterSlug: post.chapter.slug });
 		const idx = list.findIndex((p) => p.slug === params.slug);
-		nav = {
-			prev: list[idx - 1] ?? null,
-			next: list[idx + 1] ?? null
-		};
+		if (idx !== -1) {
+			nav = {
+				prev: list[idx - 1] ?? null,
+				next: list[idx + 1] ?? null
+			};
+		}
 	}
 	return { post, nav };
 };

@@ -27,10 +27,10 @@
 
 	<nav class="mt-8 flex justify-between text-sm">
 		{#if data.navLinks.earlier}
-			<a class="button" href={`/emotions/${data.navLinks.earlier.slug}`}> ← Older </a>
+			<a href={`/emotions/${data.navLinks.earlier.slug}`}> ← Starszy wpis </a>
 		{/if}
 		{#if data.navLinks.later}
-			<a class="button ml-auto" href={`/emotions/${data.navLinks.later.slug}`}> Newer → </a>
+			<a href={`/emotions/${data.navLinks.later.slug}`}> Nowszy wpis → </a>
 		{/if}
 	</nav>
 </article>
