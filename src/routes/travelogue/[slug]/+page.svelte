@@ -7,6 +7,7 @@
 </script>
 
 <article class="prose mx-auto px-4">
+	<br />
 	<h2>{data.post.title}</h2>
 
 	<InfoBox post={data.post} nav={data.nav} />
@@ -20,6 +21,7 @@
 			<!-- 📝  any non-image block (paragraph, h2, list, …) -->
 			<!-- PortableText wants an *array*, so wrap the single chunk -->
 			<PortableText value={[chunk]} />
+			<br />
 		{/if}
 	{/each}
 </article>

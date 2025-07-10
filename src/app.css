@@ -29,6 +29,10 @@
 	/* Motion */
 	--ease-default: cubic-bezier(0.4, 0, 0.2, 1);
 	--transition-fast: 0.2s var(--ease-default);
+
+	/* highlights and moments */
+	--measure: 68ch; /* prose width */
+	--picture-max: calc(var(--measure) * 2); /* ≈ 88ch */
 }
 
 /* 3. Theme palettes --------------------------------------------------------- */
@@ -248,7 +252,6 @@ h1 {
 	height: 64px;
 	backdrop-filter: blur(10px) saturate(180%);
 	background: var(--color-navbar-bg, rgba(255, 255, 255, 0.6));
-	border-bottom: 1px solid var(--color-border, #e0e0e0);
 	z-index: 1000;
 
 	.brand {
@@ -305,10 +308,16 @@ h1 {
 
 article {
 	max-width: 68ch; /* ≈ 60–75 chars on most fonts */
-	margin-inline: auto; /* centres on large screens   */
-	padding-inline: 1rem; /* 16 px gutter on mobiles     */
+	margin-inline: auto; /* centres on large screens */
+	padding-inline: 1rem; /* 16 px gutter on mobiles */
 }
 
 ul {
 	list-style: none;
+}
+
+.content {
+	width: min(90vw, var(--measure));
+	margin-inline: auto; /* centres prose */
+	padding-inline: 1rem; /* breathing room on phones */
 }
