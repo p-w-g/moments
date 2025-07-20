@@ -42,13 +42,13 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	const postsQuery = `${where}|order(publishedAt desc){${postFields}}`;
 
-	const posts = await client.fetch(postsQuery, params);
+	const moments = await client.fetch(postsQuery, params);
 
 	/* unique tags for the other dropdown */
 	const tags = await client.fetch('array::unique(*[_type=="post"].tags[])');
 
 	return {
-		posts,
+		moments,
 		chapters, // ← from the independent query
 		tags,
 		active: { tag, chapter }
