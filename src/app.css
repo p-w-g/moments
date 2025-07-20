@@ -197,70 +197,6 @@ h1 {
 	margin: 0 0 0.5em;
 }
 
-.navbar {
-	position: sticky;
-	top: 0;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 0 1.5rem;
-	height: 64px;
-	backdrop-filter: blur(10px) saturate(180%);
-	background: var(--color-navbar-bg, rgb(255 255 255 / 60%));
-	z-index: 1000;
-
-	.brand {
-		font-family: var(--font-heading, 'Merriweather', serif);
-		font-weight: 700;
-		font-size: 1.25rem;
-		color: var(--color-text, #001a33);
-		letter-spacing: 0.5px;
-		text-decoration: none;
-		display: flex;
-		align-items: baseline;
-	}
-
-	.brand .dot {
-		color: var(--color-accent, #d95f02);
-	}
-
-	.links {
-		display: flex;
-		gap: 1.5rem;
-		align-items: center;
-	}
-
-	a {
-		font-family: var(--font-body, 'Inter', sans-serif);
-		font-weight: 500;
-		color: #001a33;
-		text-decoration: none;
-		position: relative;
-		transition: opacity 0.2s ease;
-	}
-
-	a:hover {
-		opacity: 0.7;
-	}
-
-	a[selected]::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: -4px;
-		height: 2px;
-		background: var(--color-accent, #d95f02);
-	}
-
-	/* narrow screens */
-	@media (width <= 600px) {
-		.links {
-			gap: 1rem;
-		}
-	}
-}
-
 article {
 	max-width: 68ch; /* ≈ 60–75 chars on most fonts */
 	margin-inline: auto; /* centres on large screens */
@@ -277,16 +213,6 @@ ul {
 	padding-inline: 1rem; /* breathing room on phones */
 }
 
-/* ---------- parent wrapper -------------------------------- */
-.highlight-layout {
-	display: grid;
-	gap: 2rem;
-	align-items: start; /* top-align the meta */
-	max-width: 1400px; /* optional centre cap */
-	margin-inline: auto;
-	padding-inline: 1rem;
-}
-
 /* ---------- image column ---------------------------------- */
 .highlight-layout figure {
 	height: 87vh; /* headline requirement */
@@ -295,10 +221,10 @@ ul {
 }
 
 .highlight-layout figure img {
-	width: 100%;
+	width: auto;
 	height: 100%;
-	object-fit: cover; /* crop if needed */
-	box-shadow: 0 3px 12px rgb(0 0 0 / 25%);
+	object-fit: contain; /* crop if needed */
+	margin: auto;
 }
 
 /* ---------- meta column ----------------------------------- */
@@ -319,17 +245,6 @@ ul {
 
 .meta li + li {
 	margin-top: 0.25rem;
-}
-
-/* ---------- responsive switch ----------------------------- */
-@media (width <= 900px) {
-	.highlight-layout {
-		grid-template-columns: 1fr; /* stack */
-	}
-
-	.highlight-layout figure {
-		height: 60vh; /* give phones room */
-	}
 }
 
 .frame {
@@ -389,31 +304,6 @@ nav.on-body {
 	pointer-events: none;
 }
 
-/* ---------- parent wrapper -------------------------------- */
-.highlight-layout {
-	display: grid;
-	grid-template-columns: 2fr 1fr; /* image ⅔, text ⅓  */
-	gap: 2rem;
-	align-items: start; /* top-align the meta */
-	max-width: 1400px; /* optional centre cap */
-	margin-inline: auto;
-	padding-inline: 1rem;
-}
-
-/* ---------- image column ---------------------------------- */
-.highlight-layout figure {
-	height: 80vh; /* headline requirement */
-	margin: 0; /* kill default */
-}
-
-.highlight-layout figure img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover; /* crop if needed */
-	border-radius: 0.75rem; /* match your theme */
-	box-shadow: 0 3px 12px rgb(0 0 0 / 25%);
-}
-
 /* ---------- meta column ----------------------------------- */
 .meta h1 {
 	margin: 0 0 0.75rem;
@@ -432,15 +322,4 @@ nav.on-body {
 
 .meta li + li {
 	margin-top: 0.25rem;
-}
-
-/* ---------- responsive switch ----------------------------- */
-@media (width <= 900px) {
-	.highlight-layout {
-		grid-template-columns: 1fr; /* stack */
-	}
-
-	.highlight-layout figure {
-		height: 60vh; /* give phones room */
-	}
 }
