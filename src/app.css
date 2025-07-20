@@ -1,68 +1,32 @@
-/*
-================================================================================
- Portfolio Theme Tokens & Global Styles
- Author: (your name here)
-================================================================================
- Usage:
-  1. Import this file in your root layout (e.g. `src/app.css` or via <link> tag).
-  2. Toggle the theme by adding one of these classes to <html> or <body>:
-        - theme-earthsky        (light)
-        - theme-earthsky dark   (dark)
-        - theme-kodachrome      (light)
-        - theme-kodachrome dark (dark)
-        - theme-monoaccent      (light)
-        - theme-monoaccent dark (dark)
-  3. CSS variables cascade, so children inherit automatically.
-  4. Feel free to extend tokens with --radius, --shadow, etc.
-================================================================================*/
-
-/* 1. Font imports */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Merriweather:wght@400;700&display=swap');
 
-/* 2. Base variables */
 :root {
-	/* Typography */
-	--font-body: 'Inter', system-ui, sans-serif;
-	--font-heading: 'Merriweather', serif;
-	--font-size-base: 16px;
+	/* Core tones */
+	--ink: #00243d; /* headers & nav text */
+	--paper: #d8dde4; /* nav solid bg */
+	--backdrop: #06141d; /* body background */
+	--accent: #d23d3d; /* links & alerts */
 
-	/* Motion */
-	--ease-default: cubic-bezier(0.4, 0, 0.2, 1);
-	--transition-fast: 0.2s var(--ease-default);
+	/* Frosted block */
+	--frost-blur: 14px;
+	--frost-fill: hsl(210deg 30% 96% / 20%);
+	--frost-radius: 1rem;
+	--frost-mask: radial-gradient(ellipse at center, black 70%, transparent 100%);
 
-	/* highlights and moments */
-	--measure: 68ch; /* prose width */
-	--picture-max: calc(var(--measure) * 2); /* ≈ 88ch */
+	/* Layout */
+	--measure: 68ch; /* prose width      */
+	--picture-max: calc(var(--measure) * 1.3);
 }
 
-/* 3. Theme palettes --------------------------------------------------------- */
-/* Earth & Sky */
-.theme-earthsky {
-	--color-bg: #f0edee;
-	--color-surface: #ffffff;
-	--color-text: #0f4c81;
-	--color-muted: #476d92;
-	--color-accent: #d95f02;
-	--color-border: #c8d0d9;
-}
-.theme-earthsky.dark {
-	--color-bg: #0b2c4a;
-	--color-surface: #102a43;
-	--color-text: #f0edee;
-	--color-muted: #8fa7bc;
-	--color-accent: #ffa45b;
-	--color-border: #30465f;
-}
-
-/* Kodachrome */
 .theme-kodachrome {
 	--color-bg: #fff8f1;
-	--color-surface: #ffffff;
+	--color-surface: #fff;
 	--color-text: #003049;
 	--color-muted: #335c7d;
 	--color-accent: #d62828;
 	--color-border: #e4ddd4;
 }
+
 .theme-kodachrome.dark {
 	--color-bg: #00141d;
 	--color-surface: #001e2b;
@@ -72,33 +36,17 @@
 	--color-border: #25485c;
 }
 
-/* Monochrome Accent */
-.theme-monoaccent {
-	--color-bg: #ffffff;
-	--color-surface: #fafafa;
-	--color-text: #121212;
-	--color-muted: #5c5c5c;
-	--color-accent: #ff9500;
-	--color-border: #dadada;
-}
-.theme-monoaccent.dark {
-	--color-bg: #121212;
-	--color-surface: #1e1e1e;
-	--color-text: #ffffff;
-	--color-muted: #a0a0a0;
-	--color-accent: #ffb347;
-	--color-border: #2f2f2f;
-}
-
-/* 4. Global element resets/styling ---------------------------------------- */
+/* Global element resets/styling ---------------------------------------- */
 *,
 *::before,
 *::after {
 	box-sizing: border-box;
 }
+
 html {
 	font-size: var(--font-size-base);
 }
+
 body {
 	background: var(--color-bg);
 	color: var(--color-text);
@@ -118,12 +66,12 @@ h6 {
 	font-family: var(--font-heading);
 	font-weight: 700;
 	line-height: 1.2;
-	margin: 0 0 0.5em 0;
+	margin: 0 0 0.5em;
 	color: var(--color-text);
 }
 
 p {
-	margin: 0 0 1em 0;
+	margin: 0 0 1em;
 }
 
 img {
@@ -131,18 +79,17 @@ img {
 	display: block;
 }
 
-/* Links */
 a {
 	color: var(--color-accent);
 	text-decoration: none;
 	transition: color var(--transition-fast);
 }
+
 a:hover,
 a:focus {
 	text-decoration: underline;
 }
 
-/* Buttons */
 .button {
 	display: inline-flex;
 	align-items: center;
@@ -157,12 +104,12 @@ a:focus {
 		background var(--transition-fast),
 		transform var(--transition-fast);
 }
+
 .button:hover {
 	background: color-mix(in srgb, var(--color-accent) 85%, #000 15%);
 	transform: translateY(-2px);
 }
 
-/* Cards */
 .card {
 	background: var(--color-surface);
 	border: 1px solid var(--color-border);
@@ -171,24 +118,28 @@ a:focus {
 		box-shadow var(--transition-fast),
 		transform var(--transition-fast);
 }
+
 .card:hover {
-	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+	box-shadow: 0 6px 24px rgb(0 0 0 / 8%);
 	transform: translateY(-4px);
 }
 
-/* Utility mixin-like helpers (opt‑in classes) */
 .text-center {
 	text-align: center;
 }
+
 .mt-2 {
 	margin-top: 0.5rem;
 }
+
 .mb-2 {
 	margin-bottom: 0.5rem;
 }
+
 .mt-4 {
 	margin-top: 1rem;
 }
+
 .mb-4 {
 	margin-bottom: 1rem;
 }
@@ -196,7 +147,7 @@ a:focus {
 @media (prefers-color-scheme: dark) {
 	:root:not([class*='theme-']) {
 		background: #121212;
-		color: #ffffff;
+		color: #fff;
 	}
 }
 
@@ -208,19 +159,22 @@ a:focus {
 	place-items: center;
 	text-align: center;
 	margin-top: -64px;
+
 	/*  Background layer  */
 	background-image: var(--hero-url);
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
+
 	/*  Optional darkening for text legibility  */
 	isolation: isolate; /* enables stacking context */
 }
+
 .hero::before {
 	content: '';
 	position: absolute;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.35); /* tweak per image */
+	background: rgb(0 0 0 / 35%); /* tweak per image */
 	backdrop-filter: brightness(0.9); /* gentle tone-down */
 	z-index: -1;
 }
@@ -229,7 +183,9 @@ a:focus {
 	& h1 {
 		color: #fff8f1;
 	}
+
 	/* uses your theme variable */
+
 	/* color: var(--color-surface, #fff); */
 	padding: 0 1.5rem;
 	transform: translateY(-65%);
@@ -238,8 +194,9 @@ a:focus {
 h1 {
 	font-family: var(--font-heading);
 	font-size: clamp(2.5rem, 6vw, 4rem);
-	margin: 0 0 0.5em 0;
+	margin: 0 0 0.5em;
 }
+
 .navbar {
 	position: sticky;
 	top: 0;
@@ -249,7 +206,7 @@ h1 {
 	padding: 0 1.5rem;
 	height: 64px;
 	backdrop-filter: blur(10px) saturate(180%);
-	background: var(--color-navbar-bg, rgba(255, 255, 255, 0.6));
+	background: var(--color-navbar-bg, rgb(255 255 255 / 60%));
 	z-index: 1000;
 
 	.brand {
@@ -262,6 +219,7 @@ h1 {
 		display: flex;
 		align-items: baseline;
 	}
+
 	.brand .dot {
 		color: var(--color-accent, #d95f02);
 	}
@@ -296,7 +254,7 @@ h1 {
 	}
 
 	/* narrow screens */
-	@media (max-width: 600px) {
+	@media (width <= 600px) {
 		.links {
 			gap: 1rem;
 		}
@@ -318,6 +276,7 @@ ul {
 	margin-inline: auto; /* centres prose */
 	padding-inline: 1rem; /* breathing room on phones */
 }
+
 /* ---------- parent wrapper -------------------------------- */
 .highlight-layout {
 	display: grid;
@@ -339,31 +298,148 @@ ul {
 	width: 100%;
 	height: 100%;
 	object-fit: cover; /* crop if needed */
-	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 3px 12px rgb(0 0 0 / 25%);
 }
 
 /* ---------- meta column ----------------------------------- */
 .meta h1 {
 	margin: 0 0 0.75rem;
 }
+
 .meta p {
 	margin: 0 0 1rem;
 	line-height: 1.45;
 }
+
 .meta ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
+
 .meta li + li {
 	margin-top: 0.25rem;
 }
 
 /* ---------- responsive switch ----------------------------- */
-@media (max-width: 900px) {
+@media (width <= 900px) {
 	.highlight-layout {
 		grid-template-columns: 1fr; /* stack */
 	}
+
+	.highlight-layout figure {
+		height: 60vh; /* give phones room */
+	}
+}
+
+.frame {
+	padding: 32px;
+	background: var(--backdrop);
+}
+
+/* remove frame at <640 px so phones don’t lose 64 px horizontally */
+@media (width <= 640px) {
+	.frame {
+		padding: 0;
+	}
+}
+
+nav {
+	height: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-inline: 2rem;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+}
+
+/* mode A – on hero */
+nav.on-hero {
+	background: var(--frost-fill);
+	backdrop-filter: blur(var(--frost-blur));
+	border-bottom: 1px solid hsl(0deg 0% 100% / 15%);
+}
+
+/* mode B – on content */
+nav.on-body {
+	background: var(--paper);
+	color: var(--ink);
+	box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+}
+
+.frost-block {
+	position: relative;
+	isolation: isolate;
+	background: var(--frost-fill);
+	backdrop-filter: blur(var(--frost-blur));
+	border-radius: var(--frost-radius);
+	padding: 2rem 2.5rem;
+	margin-inline: auto;
+	max-width: var(--measure);
+	overflow: hidden;
+}
+
+.frost-block::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: var(--frost-fill);
+	mask: var(--frost-mask);
+	pointer-events: none;
+}
+
+/* ---------- parent wrapper -------------------------------- */
+.highlight-layout {
+	display: grid;
+	grid-template-columns: 2fr 1fr; /* image ⅔, text ⅓  */
+	gap: 2rem;
+	align-items: start; /* top-align the meta */
+	max-width: 1400px; /* optional centre cap */
+	margin-inline: auto;
+	padding-inline: 1rem;
+}
+
+/* ---------- image column ---------------------------------- */
+.highlight-layout figure {
+	height: 80vh; /* headline requirement */
+	margin: 0; /* kill default */
+}
+
+.highlight-layout figure img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover; /* crop if needed */
+	border-radius: 0.75rem; /* match your theme */
+	box-shadow: 0 3px 12px rgb(0 0 0 / 25%);
+}
+
+/* ---------- meta column ----------------------------------- */
+.meta h1 {
+	margin: 0 0 0.75rem;
+}
+
+.meta p {
+	margin: 0 0 1rem;
+	line-height: 1.45;
+}
+
+.meta ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.meta li + li {
+	margin-top: 0.25rem;
+}
+
+/* ---------- responsive switch ----------------------------- */
+@media (width <= 900px) {
+	.highlight-layout {
+		grid-template-columns: 1fr; /* stack */
+	}
+
 	.highlight-layout figure {
 		height: 60vh; /* give phones room */
 	}

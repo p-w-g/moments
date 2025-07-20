@@ -9,5 +9,5 @@ export const load = async ({ params }) => {
 		{ slug: params.slug }
 	);
 	if (!highlight) throw error(404);
-	return { highlight };
+	return { highlight, hero: true };
 };

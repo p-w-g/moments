@@ -7,6 +7,10 @@
 <script>
 	// import ThemeToggle from './ThemeToggle.svelte';
 	export let current = '/'; // active path for aria-current
+	// import { page } from '$app/state';
+
+	// $: heroMode = $page.data?.hero || $page.url.pathname === '/';
+	// $: navClasses = heroMode ? 'on-hero' : 'on-body';
 </script>
 
 <header class="navbar" role="navigation" aria-label="Site">

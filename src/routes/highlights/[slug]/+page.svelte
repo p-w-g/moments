@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let data;
 	import { urlFor } from '$lib/sanity';
+	const h = data.highlight;
 </script>
 
 <div class="highlight-layout">
@@ -23,4 +24,14 @@
 		<!-- screen-reader caption only -->
 		<figcaption class="sr-only">{data.highlight.title}</figcaption>
 	</figure>
+	<aside class="meta">
+		<h1>{h.title}</h1>
+		<p>{h.notes}</p>
+
+		<!-- <ul>
+			<li>Taken: {h.timestamp.slice(0, 10)}</li>
+			<li>Camera: {h.exif?.model}</li> -->
+		<!-- …whatever else you store… -->
+		<!-- </ul> -->
+	</aside>
 </div>
