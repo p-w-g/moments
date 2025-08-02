@@ -40,7 +40,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	const where = filters.length ? `*[_type=="post" && ${filters.join(' && ')}]` : '*[_type=="post"]';
 
-	const postsQuery = `${where}|order(publishedAt desc){${postFields}}`;
+	const postsQuery = `${where}|order(publishedAt asc){${postFields}}`;
 
 	const moments = await client.fetch(postsQuery, params);
 
