@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev --open",
+		"dev": "vite dev --open --host",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -29,6 +29,8 @@
 		"mdsvex": "^0.12.3",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
+		"stylelint": "^16.21.1",
+		"stylelint-config-standard": "^38.0.0",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",

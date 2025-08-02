@@ -17,10 +17,7 @@
 			<img
 				src={urlFor(data.highlight.image).width(768).auto('format').url()}
 				alt={data.highlight.title}
-				class="w-full h-auto rounded-lg shadow"
 			/>
 		</picture>
-		<!-- screen-reader caption only -->
-		<figcaption class="sr-only">{data.highlight.title}</figcaption>
 	</figure>
 </div>

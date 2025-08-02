@@ -1,5 +1,5 @@
 <script>
-	const bg = '/DSC_2359.jpeg';
+	const bg = '/DSC_2359_s.webp';
 </script>
 
 <section class="hero" style={`--hero-url: url('${bg}')`}>
@@ -9,4 +9,3 @@
 		<!-- <a href="/highlights" class="button">See prints</a> -->
 	</div>
 </section>
-
