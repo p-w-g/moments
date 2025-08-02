@@ -1,7 +1,6 @@
 <script lang="ts">
 	export let data;
 	import { urlFor } from '$lib/sanity';
-	const h = data.highlight;
 </script>
 
 <div class="highlight-layout">
