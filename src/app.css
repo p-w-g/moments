@@ -19,7 +19,7 @@
 }
 
 .theme-kodachrome {
-	--color-bg: #fff8f1;
+	--color-bg: #eee;
 	--color-surface: #fff;
 	--color-text: #003049;
 	--color-muted: #335c7d;
@@ -179,6 +179,12 @@ a:focus {
 	z-index: -1;
 }
 
+h1 {
+	font-family: var(--font-heading);
+	font-size: clamp(2.5rem, 6vw, 4rem);
+	margin: 0 0 0.5em;
+}
+
 .hero-content {
 	& h1 {
 		color: #fff8f1;
@@ -189,12 +195,6 @@ a:focus {
 	/* color: var(--color-surface, #fff); */
 	padding: 0 1.5rem;
 	transform: translateY(-65%);
-}
-
-h1 {
-	font-family: var(--font-heading);
-	font-size: clamp(2.5rem, 6vw, 4rem);
-	margin: 0 0 0.5em;
 }
 
 article {
@@ -302,24 +302,4 @@ nav.on-body {
 	background: var(--frost-fill);
 	mask: var(--frost-mask);
 	pointer-events: none;
-}
-
-/* ---------- meta column ----------------------------------- */
-.meta h1 {
-	margin: 0 0 0.75rem;
-}
-
-.meta p {
-	margin: 0 0 1rem;
-	line-height: 1.45;
-}
-
-.meta ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.meta li + li {
-	margin-top: 0.25rem;
 }

@@ -32,6 +32,23 @@
 		max-width: 80rem; /* keeps it from stretching    */
 		margin-inline: auto; /* centre inside the viewport  */
 		padding-inline: 1rem;
+
+		ul {
+			margin: 0 0 1.4rem;
+			padding-left: 1.1rem;
+			list-style: square;
+		}
+		li {
+			margin: 0.15rem 0;
+			list-style-type: counter;
+		}
+		a {
+			text-decoration: none;
+			transition: color 0.2s;
+		}
+	}
+	a:hover {
+		color: var(--accent);
 	}
 
 	/* ≥ 768 px → 3 columns */
@@ -39,25 +56,5 @@
 		.chapter-cloud {
 			grid-template-columns: repeat(3, 1fr);
 		}
-	}
-
-	/* head & list styling (unchanged) */
-	.chapter-cloud h2 {
-		margin: 0 0 0.3rem;
-	}
-	.chapter-cloud ul {
-		margin: 0 0 1.4rem;
-		padding-left: 1.1rem;
-		list-style: square;
-	}
-	.chapter-cloud li {
-		margin: 0.15rem 0;
-	}
-	.chapter-cloud a {
-		text-decoration: none;
-		transition: color 0.2s;
-	}
-	.chapter-cloud a:hover {
-		color: var(--accent);
 	}
 </style>
