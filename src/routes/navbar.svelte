@@ -1,30 +1,32 @@
 <script>
-	// import ThemeToggle from './ThemeToggle.svelte';
-	export let current = '/'; // active path for aria-current
-	// import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
-	// $: heroMode = $page.data?.hero || $page.url.pathname === '/';
-	// $: navClasses = heroMode ? 'on-hero' : 'on-body';
+	export let current = '/'; // active path for aria-current
+	let prevScrollPos = 0;
+	let navbarTop = '0';
+	const threshold = 15; // pixels
+
+	const handleScroll = () => {
+		const currentScrollPos = window.pageYOffset;
+		const delta = prevScrollPos - currentScrollPos;
+
+		if (delta > threshold) {
+			navbarTop = '0';
+		} else if (delta < -threshold) {
+			// User scrolled down more than threshold
+			navbarTop = '-80px';
+		}
+		prevScrollPos = currentScrollPos;
+	};
+
+	onMount(() => {
+		prevScrollPos = window.pageYOffset;
+		window.addEventListener('scroll', handleScroll);
+	});
 </script>
 
-<header class="navbar" role="navigation" aria-label="Site">
-	<input id="nav-toggle" type="checkbox" class="nav-toggle" />
-
+<header class="navbar" role="navigation" aria-label="Site" style="top: {navbarTop}">
 	<a class="brand" href="/">moments</a>
-
-	<label for="nav-toggle" class="burger" aria-label="Menu">
-		<svg
-			viewBox="0 0 20 14"
-			stroke="currentColor"
-			stroke-width="2"
-			fill="none"
-			stroke-linecap="round"
-		>
-			<path d="M1 1h18" />
-			<path d="M1 7h18" />
-			<path d="M1 13h18" />
-		</svg>
-	</label>
 
 	<nav class="links">
 		<a href="/travelogue" class:selected={current.startsWith('/travelogue')}>Travelogue</a>
@@ -42,8 +44,9 @@
 		padding-inline: 1.25rem;
 		background: var(--paper);
 		color: var(--ink);
-		position: relative;
+		position: fixed;
 		z-index: 100;
+		transition: top 0.3s;
 	}
 
 	.brand {
@@ -51,23 +54,6 @@
 		text-decoration: none;
 	}
 
-	.nav-toggle {
-		position: absolute;
-		inset: 0;
-		opacity: 0;
-		pointer-events: none;
-	}
-
-	.burger {
-		display: inline-flex;
-		cursor: pointer;
-		user-select: none;
-	}
-	@media (min-width: 768px) {
-		.burger {
-			display: none;
-		}
-	}
 	.links {
 		display: flex;
 		gap: 1.5rem;
@@ -77,27 +63,8 @@
 		position: relative;
 	}
 
-	@media (max-width: 767px) {
-		.links {
-			position: absolute;
-			top: 72px;
-			left: 0;
-			right: 0;
-			flex-direction: column;
-			background: var(--paper);
-			padding: 1rem 1.25rem;
-			max-height: 0;
-			overflow: hidden;
-			transition: max-height 0.35s ease;
-		}
-
-		.nav-toggle:checked + .brand + .burger + .links {
-			max-height: 240px;
-		}
-	}
 	.navbar {
 		position: sticky;
-		top: 0;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
