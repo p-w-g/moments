@@ -58,5 +58,22 @@
 		break-inside: avoid;
 		margin-bottom: var(--space-2);
 		overflow: hidden;
+		transition: opacity var(--transition-base);
+	}
+
+	.item:hover,
+	.item:focus-visible {
+		opacity: 0.92;
+	}
+
+	.item:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.item {
+			transition: none;
+		}
 	}
 </style>
