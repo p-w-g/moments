@@ -29,9 +29,7 @@
 	<a class="brand" href="/">moments</a>
 
 	<nav class="links">
-		<a href="/travelogue" class:selected={current.startsWith('/travelogue')}>Travelogue</a>
 		<a href="/highlights" class:selected={current.startsWith('/highlights')}>Highlights</a>
-		<!-- <a href="/whoami" class:selected={current.startsWith('/whoami')}>$WhoAmI</a> -->
 	</nav>
 </header>
 
