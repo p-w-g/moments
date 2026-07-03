@@ -141,13 +141,7 @@ ul {
 
 /* Highlight detail image column ------------------------------------------ */
 .highlight-layout figure {
+	position: relative;
 	height: 87vh;
-	margin: auto;
-}
-
-.highlight-layout figure img {
-	width: auto;
-	height: 100%;
-	object-fit: contain;
 	margin: auto;
 }

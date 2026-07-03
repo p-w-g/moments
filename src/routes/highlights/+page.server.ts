@@ -6,7 +6,14 @@ export const load = async () => {
       _id,
       title,
       "slug": slug.current,
-      image
+      image{
+        alt,
+        asset->{
+          _id,
+          url,
+          metadata{ lqip, dimensions{ width, height } }
+        }
+      }
     } | order(_createdAt desc)
   `);
 	return { highlights };

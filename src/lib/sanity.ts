@@ -9,8 +9,19 @@ export const client = createClient({
 	useCdn: true
 });
 
-// Tiny helper for images
+export interface SanityImage {
+	alt?: string;
+	asset?: {
+		_id: string;
+		url: string;
+		metadata?: {
+			lqip?: string;
+			dimensions?: { width: number; height: number };
+		};
+	};
+}
+
 const builder = imageUrlBuilder(client);
-export const urlFor = (src: any) => {
+export const urlFor = (src: SanityImage) => {
 	return builder.image(src);
 };
