@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check
+      - run: npm run build
+        env:
+          # Placeholders only: the Sanity client requires a non-empty
+          # projectId/dataset to construct, but the build doesn't
+          # prerender or call the API, so real credentials aren't needed.
+          PUBLIC_SANITY_PROJECT_ID: ci-placeholder
+          PUBLIC_SANITY_DATASET: production
