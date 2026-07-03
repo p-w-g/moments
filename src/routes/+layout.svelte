@@ -1,10 +1,9 @@
 <script>
-	import { page } from '$app/stores';
 	import Navbar from './navbar.svelte';
 	import '../app.css';
 </script>
 
-<Navbar current={$page.url.pathname} />
+<Navbar />
 <main>
 	<slot />
 </main>

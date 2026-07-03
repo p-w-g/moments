@@ -1,8 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
 
-	export let current = '/'; // active path for aria-current
-
 	let hidden = false;
 	let prevScrollPos = 0;
 	const threshold = 15; // pixels, avoids twitchy toggling on tiny scroll jitter
@@ -32,13 +30,7 @@
 	<a class="brand" href="/">moments</a>
 
 	<nav class="links">
-		<a
-			href="/highlights"
-			class:selected={current.startsWith('/highlights')}
-			aria-current={current.startsWith('/highlights') ? 'page' : undefined}
-		>
-			Highlights
-		</a>
+		<a href="/#gallery">Gallery</a>
 	</nav>
 </header>
 
@@ -79,27 +71,12 @@
 		font-family: var(--font-body);
 		font-weight: 500;
 		color: var(--color-text);
-		position: relative;
 		transition: opacity var(--transition-fast);
 	}
 
 	.links a:hover {
 		opacity: 0.7;
 		text-decoration: none;
-	}
-
-	.links a.selected {
-		opacity: 1;
-	}
-
-	.links a.selected::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: -4px;
-		height: 1px;
-		background: currentColor;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
