@@ -19,7 +19,8 @@
 	--space-8: 2rem;
 	--space-12: 3rem;
 
-	/* Chrome (navbar frosted glass) */
+	/* Chrome */
+	--nav-height: 64px;
 	--frost-blur: 14px;
 	--frost-fill: hsl(210deg 30% 96% / 20%);
 
@@ -109,6 +110,7 @@ ul {
 .hero {
 	position: relative;
 	min-height: 100vh;
+	margin-top: calc(var(--nav-height) * -1);
 	display: grid;
 	place-items: center;
 	text-align: center;
