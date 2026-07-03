@@ -1,9 +1,37 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import HighlightGrid from '$lib/HighlightGrid.svelte';
+	import { urlFor, type Highlight } from '$lib/sanity';
+	import { jsonLdScriptTag } from '$lib/jsonLd';
 
-	export let data;
+	export let data: { highlights: Highlight[] };
 	const bg = '/DSC_2359_s.webp';
+
+	const description = 'Everything is a moment — a photography gallery.';
+
+	$: ogImage = new URL(bg, $page.url.origin).toString();
+	$: jsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'ImageGallery',
+		name: 'moments',
+		description,
+		image: data.highlights
+			.filter((h) => h.image?.asset)
+			.map((h) => urlFor(h.image).width(1600).auto('format').url())
+	};
+	$: jsonLdScript = jsonLdScriptTag(jsonLd);
 </script>
+
+<svelte:head>
+	<meta name="description" content={description} />
+	<meta property="og:title" content="moments — photography" />
+	<meta property="og:description" content={description} />
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content={ogImage} />
+	<meta name="twitter:card" content="summary_large_image" />
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -- jsonLdScript is built from JSON.stringify with `<` escaped, not raw markup -->
+	{@html jsonLdScript}
+</svelte:head>
 
 <section class="hero" style={`--hero-url: url('${bg}')`}>
 	<div class="hero-content">

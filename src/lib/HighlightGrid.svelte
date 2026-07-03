@@ -1,13 +1,6 @@
 <script lang="ts">
 	import GalleryImage from '$lib/GalleryImage.svelte';
-	import type { SanityImage } from '$lib/sanity';
-
-	interface Highlight {
-		_id: string;
-		title: string;
-		slug: string;
-		image: SanityImage;
-	}
+	import type { Highlight } from '$lib/sanity';
 
 	export let highlights: Highlight[] = [];
 </script>

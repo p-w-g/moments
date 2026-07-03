@@ -1,12 +1,29 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import GalleryImage from '$lib/GalleryImage.svelte';
+	import { urlFor } from '$lib/sanity';
+	import { jsonLdScriptTag } from '$lib/jsonLd';
 
 	export let data;
 
 	$: prevHref = data.nav.prev ? `/highlights/${data.nav.prev}` : null;
 	$: nextHref = data.nav.next ? `/highlights/${data.nav.next}` : null;
+	$: description = `Photograph: ${data.highlight.title}`;
+	$: ogImage = data.highlight.image?.asset
+		? urlFor(data.highlight.image).width(1200).auto('format').url()
+		: null;
+	$: jsonLd = data.highlight.image?.asset
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'ImageObject',
+				name: data.highlight.title,
+				contentUrl: urlFor(data.highlight.image).width(1920).auto('format').url(),
+				url: $page.url.href
+			}
+		: null;
+	$: jsonLdScript = jsonLd ? jsonLdScriptTag(jsonLd) : null;
 
 	const handleKeydown = (e: KeyboardEvent) => {
 		if (e.key === 'ArrowLeft' && prevHref) goto(prevHref);
@@ -33,6 +50,18 @@
 
 <svelte:head>
 	<title>{data.highlight.title} — moments</title>
+	<meta name="description" content={description} />
+	<meta property="og:title" content={data.highlight.title} />
+	<meta property="og:description" content={description} />
+	<meta property="og:type" content="website" />
+	{#if ogImage}
+		<meta property="og:image" content={ogImage} />
+	{/if}
+	<meta name="twitter:card" content="summary_large_image" />
+	{#if jsonLdScript}
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -- jsonLdScript is built from JSON.stringify with `<` escaped, not raw markup -->
+		{@html jsonLdScript}
+	{/if}
 </svelte:head>
 
 <div class="highlight-layout" on:touchstart={handleTouchStart} on:touchend={handleTouchEnd}>

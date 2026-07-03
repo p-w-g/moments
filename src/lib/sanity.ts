@@ -21,6 +21,13 @@ export interface SanityImage {
 	};
 }
 
+export interface Highlight {
+	_id: string;
+	title: string;
+	slug: string;
+	image: SanityImage;
+}
+
 const builder = imageUrlBuilder(client);
 export const urlFor = (src: SanityImage) => {
 	return builder.image(src);
