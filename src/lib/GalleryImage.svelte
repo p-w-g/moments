@@ -17,9 +17,9 @@
 	$: lqip = image?.asset?.metadata?.lqip;
 	$: src = image ? urlFor(image).width(1400).auto('format').quality(80).url() : '';
 	$: srcset = image
-		? widths.map((w) => `${urlFor(image).width(w).auto('format').quality(80).url()} ${w}w`).join(
-				', '
-			)
+		? widths
+				.map((w) => `${urlFor(image).width(w).auto('format').quality(80).url()} ${w}w`)
+				.join(', ')
 		: '';
 	$: ratio = dimensions ? `${dimensions.width} / ${dimensions.height}` : '3 / 2';
 
