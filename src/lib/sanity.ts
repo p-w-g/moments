@@ -75,7 +75,9 @@ export interface ExifSummary {
 export const summarizeExif = (exif?: SanityImageExif): ExifSummary => {
 	if (!exif) return {};
 
-	const date = exif.DateTimeOriginal ? (formatExifDate(exif.DateTimeOriginal) ?? undefined) : undefined;
+	const date = exif.DateTimeOriginal
+		? (formatExifDate(exif.DateTimeOriginal) ?? undefined)
+		: undefined;
 	const camera = [exif.Make, exif.Model].filter(Boolean).join(' ') || undefined;
 	const lens = exif.LensModel || undefined;
 
