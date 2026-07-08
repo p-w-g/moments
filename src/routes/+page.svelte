@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { jsonLdScriptTag } from '$lib/jsonLd';
-	import { urlFor, type Highlight, type HighlightCategory } from '$lib/sanity';
+	import { urlFor, type Highlight, type HighlightCategory, type SanityImage } from '$lib/sanity';
 	import GalleryImage from '$lib/GalleryImage.svelte';
 
-	export let data: { highlights: Highlight[] };
+	export let data: { highlights: Highlight[]; heroImage: SanityImage | null };
 
 	type Category = 'all' | HighlightCategory;
 
-	const heroImage = '/landing/hero-rain-bridge.jpg';
+	const fallbackHero = '/landing/hero-rain-bridge.jpg';
+	const heroWidths = [640, 1080, 1400, 1920, 2400, 3200];
 
 	const categoryLabels: Record<HighlightCategory, string> = {
 		travel: 'Travel',
@@ -25,6 +26,17 @@
 		{ key: 'life', label: 'Slice of Life' }
 	];
 
+	$: heroImage = data.heroImage;
+	$: heroSrc = heroImage
+		? urlFor(heroImage).width(2400).auto('format').quality(80).url()
+		: fallbackHero;
+	$: heroSrcset = heroImage
+		? heroWidths
+				.map((w) => `${urlFor(heroImage).width(w).auto('format').quality(80).url()} ${w}w`)
+				.join(', ')
+		: undefined;
+	$: heroAlt = data.heroImage?.alt ?? 'Rain-slicked pedestrian bridge at night, Osaka';
+
 	let activeCategory: Category = 'all';
 	$: visibleHighlights = data.highlights.filter(
 		(h) => activeCategory === 'all' || h.category === activeCategory
@@ -33,7 +45,7 @@
 	const description =
 		'A working photo journal — cities at odd hours, the animals in them, and the small moments in between.';
 
-	$: ogImage = new URL(heroImage, $page.url.origin).toString();
+	$: ogImage = heroSrc.startsWith('http') ? heroSrc : new URL(heroSrc, $page.url.origin).toString();
 	$: jsonLd = {
 		'@context': 'https://schema.org',
 		'@type': 'ImageGallery',
@@ -80,8 +92,10 @@
 
 		<img
 			class="hero-image"
-			src={heroImage}
-			alt="Rain-slicked pedestrian bridge at night, Osaka"
+			src={heroSrc}
+			srcset={heroSrcset}
+			sizes="100vw"
+			alt={heroAlt}
 			loading="eager"
 			fetchpriority="high"
 			decoding="async"
