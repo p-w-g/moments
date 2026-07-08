@@ -6,7 +6,7 @@ const highlightsQuery = `*[_type=="highlight"]|order(_createdAt desc){
 	_id,
 	title,
 	"slug": slug.current,
-	category,
+	tags,
 	caption,
 	image{
 		alt,

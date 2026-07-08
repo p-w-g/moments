@@ -6,20 +6,17 @@
 
 	export let data: { highlights: Highlight[]; heroImage: SanityImage | null };
 
-	type Category = 'all' | HighlightCategory;
-
 	const fallbackHero = '/landing/hero-rain-bridge.jpg';
 	const heroWidths = [640, 1080, 1400, 1920, 2400, 3200];
 
-	const categoryLabels: Record<HighlightCategory, string> = {
+	const tagLabels: Record<HighlightCategory, string> = {
 		travel: 'Travel',
 		animals: 'Animals',
 		food: 'Food',
 		life: 'Slice of Life'
 	};
 
-	const categories: { key: Category; label: string }[] = [
-		{ key: 'all', label: 'All' },
+	const tagOptions: { key: HighlightCategory; label: string }[] = [
 		{ key: 'travel', label: 'Travel' },
 		{ key: 'animals', label: 'Animals' },
 		{ key: 'food', label: 'Food' },
@@ -37,9 +34,16 @@
 		: undefined;
 	$: heroAlt = data.heroImage?.alt ?? 'Rain-slicked pedestrian bridge at night, Osaka';
 
-	let activeCategory: Category = 'all';
-	$: visibleHighlights = data.highlights.filter(
-		(h) => activeCategory === 'all' || h.category === activeCategory
+	// Selecting more tags narrows the results (intersection), not broadens them —
+	// picking Travel + Food finds moments that are both, not either.
+	let selectedTags: HighlightCategory[] = [];
+	const toggleTag = (tag: HighlightCategory) => {
+		selectedTags = selectedTags.includes(tag)
+			? selectedTags.filter((t) => t !== tag)
+			: [...selectedTags, tag];
+	};
+	$: visibleHighlights = data.highlights.filter((h) =>
+		selectedTags.every((tag) => h.tags.includes(tag))
 	);
 
 	const description =
@@ -108,7 +112,7 @@
 			<p class="subcopy">{description}</p>
 		</div>
 
-		<a class="scroll-cue" href="#work" aria-label="Scroll to selected work">
+		<a class="scroll-cue" href="#work" aria-label="Scroll to curated moments">
 			<span class="scroll-line" aria-hidden="true"></span>
 			<span>Scroll</span>
 		</a>
@@ -116,17 +120,26 @@
 
 	<section id="work" class="work">
 		<div class="work-header">
-			<p class="eyebrow">Selected Work</p>
-			<div class="chips" role="group" aria-label="Filter by category">
-				{#each categories as cat (cat.key)}
+			<p class="eyebrow">Curated Moments</p>
+			<div class="chips" role="group" aria-label="Narrow by tag">
+				<button
+					type="button"
+					class="chip"
+					class:active={selectedTags.length === 0}
+					aria-pressed={selectedTags.length === 0}
+					on:click={() => (selectedTags = [])}
+				>
+					All
+				</button>
+				{#each tagOptions as tag (tag.key)}
 					<button
 						type="button"
 						class="chip"
-						class:active={activeCategory === cat.key}
-						aria-pressed={activeCategory === cat.key}
-						on:click={() => (activeCategory = cat.key)}
+						class:active={selectedTags.includes(tag.key)}
+						aria-pressed={selectedTags.includes(tag.key)}
+						on:click={() => toggleTag(tag.key)}
 					>
-						{cat.label}
+						{tag.label}
 					</button>
 				{/each}
 			</div>
@@ -142,7 +155,9 @@
 					/>
 					<div class="card-caption">
 						<div class="caption-text">{highlight.caption ?? highlight.title}</div>
-						<div class="caption-category">{categoryLabels[highlight.category]}</div>
+						<div class="caption-category">
+							{highlight.tags.map((t) => tagLabels[t]).join(' · ')}
+						</div>
 					</div>
 				</a>
 			{/each}

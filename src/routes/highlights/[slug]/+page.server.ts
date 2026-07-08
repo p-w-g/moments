@@ -7,7 +7,6 @@ export const load = async ({ params }) => {
 	const highlight = await client.fetch(
 		`*[_type=="highlight" && slug.current==$slug][0]{
       title,
-      category,
       caption,
       image{
         alt,

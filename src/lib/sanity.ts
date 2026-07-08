@@ -40,7 +40,7 @@ export interface Highlight {
 	_id: string;
 	title: string;
 	slug: string;
-	category: HighlightCategory;
+	tags: HighlightCategory[];
 	caption?: string;
 	image: SanityImage;
 }
