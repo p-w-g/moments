@@ -25,3 +25,22 @@ jobs:
       - run: npm run lint
       - run: npm run check
       - run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      # Real, non-secret values (PUBLIC_-prefixed vars ship to the client
+      # bundle anyway) — this job hits the actual Sanity dataset so a
+      # schema or query change in studio that breaks moments fails here,
+      # not in production.
+      PUBLIC_SANITY_PROJECT_ID: yq5vsg1t
+      PUBLIC_SANITY_DATASET: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
