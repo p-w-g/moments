@@ -8,6 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Placeholders only: the Sanity client requires a non-empty
+      # projectId/dataset to construct, and $env/static/public needs these
+      # to exist to generate its typed exports for svelte-check, but the
+      # build doesn't prerender or call the API, so real credentials aren't needed.
+      PUBLIC_SANITY_PROJECT_ID: ci-placeholder
+      PUBLIC_SANITY_DATASET: production
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,9 +25,3 @@ jobs:
       - run: npm run lint
       - run: npm run check
       - run: npm run build
-        env:
-          # Placeholders only: the Sanity client requires a non-empty
-          # projectId/dataset to construct, but the build doesn't
-          # prerender or call the API, so real credentials aren't needed.
-          PUBLIC_SANITY_PROJECT_ID: ci-placeholder
-          PUBLIC_SANITY_DATASET: production
