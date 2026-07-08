@@ -1,78 +1,20 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { jsonLdScriptTag } from '$lib/jsonLd';
+	import { urlFor, type Highlight, type HighlightCategory } from '$lib/sanity';
+	import GalleryImage from '$lib/GalleryImage.svelte';
 
-	type Category = 'all' | 'travel' | 'animals' | 'life';
+	export let data: { highlights: Highlight[] };
 
-	type Photo = {
-		id: string;
-		src: string;
-		alt: string;
-		caption: string;
-		category: Exclude<Category, 'all'>;
-		categoryLabel: string;
-	};
-
-	type EmptySlot = {
-		id: string;
-		category: Exclude<Category, 'all'>;
-		placeholder: string;
-		height: number;
-	};
+	type Category = 'all' | HighlightCategory;
 
 	const heroImage = '/landing/hero-rain-bridge.jpg';
 
-	// Static seed content per the design handoff — swap for a CMS-driven fetch
-	// once the Sanity "highlight" schema grows a category field.
-	const photos: Photo[] = [
-		{
-			id: 'travel-1',
-			src: '/landing/travel-golden-hour.jpg',
-			alt: 'Golden-hour street crossing, Osaka',
-			caption: 'Osaka, golden hour',
-			category: 'travel',
-			categoryLabel: 'Travel'
-		},
-		{
-			id: 'animals-1',
-			src: '/landing/animal-cat-portrait.jpg',
-			alt: 'Grey longhair cat portrait',
-			caption: 'A quiet Tuesday',
-			category: 'animals',
-			categoryLabel: 'Animals'
-		},
-		{
-			id: 'life-1',
-			src: '/landing/life-neon-market.jpg',
-			alt: 'Neon shop sign, night market',
-			caption: 'Night market glow',
-			category: 'life',
-			categoryLabel: 'Slice of Life'
-		},
-		{
-			id: 'travel-2',
-			src: '/landing/travel-blue-hour.jpg',
-			alt: 'Blue-hour street silhouette',
-			caption: 'Blue hour, backstreets',
-			category: 'travel',
-			categoryLabel: 'Travel'
-		}
-	];
-
-	const emptySlots: EmptySlot[] = [
-		{
-			id: 'slot-animals-2',
-			category: 'animals',
-			placeholder: 'Drop another animal photo',
-			height: 340
-		},
-		{
-			id: 'slot-life-2',
-			category: 'life',
-			placeholder: 'Drop another slice-of-life photo',
-			height: 260
-		}
-	];
+	const categoryLabels: Record<HighlightCategory, string> = {
+		travel: 'Travel',
+		animals: 'Animals',
+		life: 'Slice of Life'
+	};
 
 	const categories: { key: Category; label: string }[] = [
 		{ key: 'all', label: 'All' },
@@ -82,11 +24,8 @@
 	];
 
 	let activeCategory: Category = 'all';
-	$: visiblePhotos = photos.filter(
-		(p) => activeCategory === 'all' || p.category === activeCategory
-	);
-	$: visibleSlots = emptySlots.filter(
-		(s) => activeCategory === 'all' || s.category === activeCategory
+	$: visibleHighlights = data.highlights.filter(
+		(h) => activeCategory === 'all' || h.category === activeCategory
 	);
 
 	const description =
@@ -98,9 +37,12 @@
 		'@type': 'ImageGallery',
 		name: 'moments',
 		description,
-		image: [heroImage, ...photos.map((p) => p.src)].map((src) =>
-			new URL(src, $page.url.origin).toString()
-		)
+		image: [
+			ogImage,
+			...data.highlights
+				.filter((h) => h.image?.asset)
+				.map((h) => urlFor(h.image).width(1200).auto('format').url())
+		]
 	};
 	$: jsonLdScript = jsonLdScriptTag(jsonLd);
 </script>
@@ -175,19 +117,18 @@
 		</div>
 
 		<div class="masonry">
-			{#each visiblePhotos as photo (photo.id)}
-				<div class="card">
-					<img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
+			{#each visibleHighlights as highlight (highlight._id)}
+				<a class="card" href={`/highlights/${highlight.slug}`}>
+					<GalleryImage
+						image={highlight.image}
+						alt={highlight.image?.alt ?? highlight.title}
+						sizes="(min-width: 900px) 33vw, (min-width: 560px) 50vw, 100vw"
+					/>
 					<div class="card-caption">
-						<div class="caption-text">{photo.caption}</div>
-						<div class="caption-category">{photo.categoryLabel}</div>
+						<div class="caption-text">{highlight.caption ?? highlight.title}</div>
+						<div class="caption-category">{categoryLabels[highlight.category]}</div>
 					</div>
-				</div>
-			{/each}
-			{#each visibleSlots as slot (slot.id)}
-				<div class="card slot" style:height={`${slot.height}px`}>
-					{slot.placeholder}
-				</div>
+				</a>
 			{/each}
 		</div>
 	</section>
@@ -423,15 +364,13 @@
 	}
 
 	.card {
+		display: block;
 		break-inside: avoid;
 		margin-bottom: 28px;
 		position: relative;
 	}
 
-	.card img {
-		width: 100%;
-		height: auto;
-		display: block;
+	.card :global(img) {
 		border-radius: 2px;
 	}
 
@@ -444,10 +383,11 @@
 		background: linear-gradient(0deg, rgba(14, 13, 12, 0.82), rgba(14, 13, 12, 0));
 		opacity: 0;
 		transition: opacity 0.25s;
+		pointer-events: none;
 	}
 
 	.card:hover .card-caption,
-	.card:focus-within .card-caption {
+	.card:focus-visible .card-caption {
 		opacity: 1;
 	}
 
@@ -462,18 +402,6 @@
 		text-transform: uppercase;
 		color: var(--accent);
 		margin-top: 4px;
-	}
-
-	.card.slot {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		padding: 16px;
-		border-radius: 2px;
-		border: 1px dashed rgba(245, 242, 236, 0.22);
-		color: rgba(245, 242, 236, 0.4);
-		font-size: 13px;
 	}
 
 	/* Footer ---------------------------------------------------------------- */
