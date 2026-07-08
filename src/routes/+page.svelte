@@ -107,7 +107,7 @@
 		<div class="hero-scrim" aria-hidden="true"></div>
 
 		<div class="hero-content">
-			<p class="eyebrow">Travel · Animals · Everyday Life</p>
+			<p class="eyebrow">Travel · Food · Everyday Life</p>
 			<h1>Frames from<br />the road.</h1>
 			<p class="subcopy">{description}</p>
 		</div>
