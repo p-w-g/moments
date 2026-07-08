@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { jsonLdScriptTag } from '$lib/jsonLd';
 	import { urlFor, type Highlight, type HighlightCategory, type SanityImage } from '$lib/sanity';
 	import GalleryImage from '$lib/GalleryImage.svelte';
 
 	export let data: { highlights: Highlight[]; heroImage: SanityImage | null };
 
-	const fallbackHero = '/landing/hero-rain-bridge.jpg';
 	const heroWidths = [640, 1080, 1400, 1920, 2400, 3200];
 
 	const tagLabels: Record<HighlightCategory, string> = {
@@ -24,15 +22,13 @@
 	];
 
 	$: heroImage = data.heroImage;
-	$: heroSrc = heroImage
-		? urlFor(heroImage).width(2400).auto('format').quality(80).url()
-		: fallbackHero;
+	$: heroSrc = heroImage ? urlFor(heroImage).width(2400).auto('format').quality(80).url() : null;
 	$: heroSrcset = heroImage
 		? heroWidths
 				.map((w) => `${urlFor(heroImage).width(w).auto('format').quality(80).url()} ${w}w`)
 				.join(', ')
 		: undefined;
-	$: heroAlt = data.heroImage?.alt ?? 'Rain-slicked pedestrian bridge at night, Osaka';
+	$: heroAlt = heroImage?.alt ?? '';
 
 	// Selecting more tags narrows the results (intersection), not broadens them —
 	// picking Travel + Food finds moments that are both, not either.
@@ -49,14 +45,19 @@
 	const description =
 		'A working photo journal — cities at odd hours, the animals in them, and the small moments in between.';
 
-	$: ogImage = heroSrc.startsWith('http') ? heroSrc : new URL(heroSrc, $page.url.origin).toString();
+	// Sanity image URLs are already absolute; fall back to the first highlight
+	// when there's no hero pick yet (e.g. nothing tagged isHero).
+	$: firstHighlightImage = data.highlights.find((h) => h.image?.asset)?.image;
+	$: ogImage =
+		heroSrc ??
+		(firstHighlightImage ? urlFor(firstHighlightImage).width(1200).auto('format').url() : null);
 	$: jsonLd = {
 		'@context': 'https://schema.org',
 		'@type': 'ImageGallery',
 		name: 'moments',
 		description,
 		image: [
-			ogImage,
+			...(ogImage ? [ogImage] : []),
 			...data.highlights
 				.filter((h) => h.image?.asset)
 				.map((h) => urlFor(h.image).width(1200).auto('format').url())
@@ -70,7 +71,9 @@
 	<meta property="og:title" content="moments — photography" />
 	<meta property="og:description" content={description} />
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content={ogImage} />
+	{#if ogImage}
+		<meta property="og:image" content={ogImage} />
+	{/if}
 	<meta name="twitter:card" content="summary_large_image" />
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -- jsonLdScript is built from JSON.stringify with `<` escaped, not raw markup -->
 	{@html jsonLdScript}
@@ -94,20 +97,22 @@
 			-->
 		</nav>
 
-		<img
-			class="hero-image"
-			src={heroSrc}
-			srcset={heroSrcset}
-			sizes="100vw"
-			alt={heroAlt}
-			loading="eager"
-			fetchpriority="high"
-			decoding="async"
-		/>
+		{#if heroSrc}
+			<img
+				class="hero-image"
+				src={heroSrc}
+				srcset={heroSrcset}
+				sizes="100vw"
+				alt={heroAlt}
+				loading="eager"
+				fetchpriority="high"
+				decoding="async"
+			/>
+		{/if}
 		<div class="hero-scrim" aria-hidden="true"></div>
 
 		<div class="hero-content">
-			<p class="eyebrow">Travel · Food · Everyday Life</p>
+			<p class="eyebrow">Travel · Animals · Everyday Life</p>
 			<h1>Frames from<br />the road.</h1>
 			<p class="subcopy">{description}</p>
 		</div>
@@ -198,6 +203,7 @@
 		height: 100vh;
 		min-height: 680px;
 		overflow: hidden;
+		background: var(--bg);
 	}
 
 	.nav {
