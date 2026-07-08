@@ -28,7 +28,7 @@
 	const handleKeydown = (e: KeyboardEvent) => {
 		if (e.key === 'ArrowLeft' && prevHref) goto(prevHref);
 		else if (e.key === 'ArrowRight' && nextHref) goto(nextHref);
-		else if (e.key === 'Escape') goto('/#gallery');
+		else if (e.key === 'Escape') goto('/#work');
 	};
 
 	let touchStartX = 0;
@@ -65,7 +65,7 @@
 </svelte:head>
 
 <div class="highlight-layout" on:touchstart={handleTouchStart} on:touchend={handleTouchEnd}>
-	<a class="back" href="/#gallery">← Gallery</a>
+	<a class="back" href="/#work">← Work</a>
 
 	{#if prevHref}
 		<a class="edge prev" href={prevHref} aria-label="Previous photo">‹</a>
