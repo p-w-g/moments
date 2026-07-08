@@ -3,11 +3,12 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import GalleryImage from '$lib/GalleryImage.svelte';
-	import { urlFor } from '$lib/sanity';
+	import { urlFor, summarizeExif } from '$lib/sanity';
 	import { jsonLdScriptTag } from '$lib/jsonLd';
 
 	export let data;
 
+	$: exif = summarizeExif(data.highlight.image?.asset?.metadata?.exif);
 	$: prevHref = data.nav.prev ? `/highlights/${data.nav.prev}` : null;
 	$: nextHref = data.nav.next ? `/highlights/${data.nav.next}` : null;
 	$: description = `Photograph: ${data.highlight.title}`;
@@ -28,7 +29,7 @@
 	const handleKeydown = (e: KeyboardEvent) => {
 		if (e.key === 'ArrowLeft' && prevHref) goto(prevHref);
 		else if (e.key === 'ArrowRight' && nextHref) goto(nextHref);
-		else if (e.key === 'Escape') goto('/#gallery');
+		else if (e.key === 'Escape') goto('/#work');
 	};
 
 	let touchStartX = 0;
@@ -65,7 +66,7 @@
 </svelte:head>
 
 <div class="highlight-layout" on:touchstart={handleTouchStart} on:touchend={handleTouchEnd}>
-	<a class="back" href="/#gallery">← Gallery</a>
+	<a class="back" href="/#work">← Work</a>
 
 	{#if prevHref}
 		<a class="edge prev" href={prevHref} aria-label="Previous photo">‹</a>
@@ -83,9 +84,18 @@
 			sizes="100vw"
 			priority
 		/>
+		<figcaption class="caption">
+			<p class="caption-title">{data.highlight.title}</p>
+			{#if data.highlight.caption}
+				<p class="caption-description">{data.highlight.caption}</p>
+			{/if}
+			{#if exif.date || exif.camera || exif.settings}
+				<p class="caption-meta">
+					{[exif.date, exif.camera, exif.lens, exif.settings].filter(Boolean).join(' · ')}
+				</p>
+			{/if}
+		</figcaption>
 	</figure>
-
-	<p class="caption">{data.highlight.title}</p>
 </div>
 
 <style>
@@ -139,5 +149,20 @@
 		font-family: var(--font-body);
 		color: var(--color-muted);
 		margin: var(--space-4) 0 0;
+	}
+
+	.caption-title {
+		margin: 0;
+		color: var(--color-text);
+	}
+
+	.caption-description {
+		margin: var(--space-1) 0 0;
+	}
+
+	.caption-meta {
+		margin: var(--space-1) 0 0;
+		font-size: 0.85rem;
+		opacity: 0.75;
 	}
 </style>

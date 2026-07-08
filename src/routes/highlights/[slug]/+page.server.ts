@@ -7,12 +7,13 @@ export const load = async ({ params }) => {
 	const highlight = await client.fetch(
 		`*[_type=="highlight" && slug.current==$slug][0]{
       title,
+      caption,
       image{
         alt,
         asset->{
           _id,
           url,
-          metadata{ lqip, dimensions{ width, height } }
+          metadata{ lqip, dimensions{ width, height }, exif }
         }
       }
     }`,

@@ -24,6 +24,13 @@
 	$: ratio = dimensions ? `${dimensions.width} / ${dimensions.height}` : '3 / 2';
 
 	let loaded = false;
+	let imgEl: HTMLImageElement | undefined;
+
+	// On a hard refresh, the browser can start (and finish, from cache) loading
+	// the SSR-rendered <img> before hydration attaches the on:load listener —
+	// the event fires and is missed, leaving the image stuck behind its blur
+	// placeholder even though it's fully loaded. Re-check once hydrated.
+	$: if (src && imgEl?.complete) loaded = true;
 </script>
 
 {#if image}
@@ -34,6 +41,7 @@
 		<img
 			class="full"
 			class:loaded
+			bind:this={imgEl}
 			{src}
 			{srcset}
 			{sizes}
