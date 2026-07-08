@@ -1,113 +1,87 @@
 <script>
 	import { onMount } from 'svelte';
 
-	export let current = '/'; // active path for aria-current
+	let hidden = false;
 	let prevScrollPos = 0;
-	let navbarTop = '0';
-	const threshold = 15; // pixels
+	const threshold = 15; // pixels, avoids twitchy toggling on tiny scroll jitter
 
 	const handleScroll = () => {
-		const currentScrollPos = window.pageYOffset;
-		const delta = prevScrollPos - currentScrollPos;
+		const currentScrollPos = window.scrollY;
+		const delta = currentScrollPos - prevScrollPos;
 
-		if (delta > threshold) {
-			navbarTop = '0';
+		if (currentScrollPos < threshold) {
+			hidden = false;
+		} else if (delta > threshold) {
+			hidden = true; // scrolling down → get out of the way of the photograph
 		} else if (delta < -threshold) {
-			// User scrolled down more than threshold
-			navbarTop = '-80px';
+			hidden = false; // scrolling up → bring the nav back
 		}
 		prevScrollPos = currentScrollPos;
 	};
 
 	onMount(() => {
-		prevScrollPos = window.pageYOffset;
-		window.addEventListener('scroll', handleScroll);
+		prevScrollPos = window.scrollY;
+		window.addEventListener('scroll', handleScroll, { passive: true });
+		return () => window.removeEventListener('scroll', handleScroll);
 	});
 </script>
 
-<header class="navbar" role="navigation" aria-label="Site" style="top: {navbarTop}">
+<header class="navbar" role="navigation" aria-label="Site" class:hidden>
 	<a class="brand" href="/">moments</a>
 
 	<nav class="links">
-		<a href="/travelogue" class:selected={current.startsWith('/travelogue')}>Travelogue</a>
-		<a href="/highlights" class:selected={current.startsWith('/highlights')}>Highlights</a>
-		<!-- <a href="/whoami" class:selected={current.startsWith('/whoami')}>$WhoAmI</a> -->
+		<a href="/#gallery">Gallery</a>
 	</nav>
 </header>
 
 <style>
 	.navbar {
+		position: fixed;
+		inset-inline: 0;
+		top: 0;
+		z-index: 100;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		height: 72px;
-		padding-inline: 1.25rem;
-		background: var(--paper);
-		color: var(--ink);
-		position: fixed;
-		z-index: 100;
-		transition: top 0.3s;
+		height: var(--nav-height);
+		padding-inline: var(--space-6);
+		background: var(--frost-fill);
+		backdrop-filter: blur(var(--frost-blur));
+		transition: transform var(--transition-base);
+	}
+
+	.navbar.hidden {
+		transform: translateY(-100%);
 	}
 
 	.brand {
+		font-family: var(--font-heading);
 		font-weight: 700;
-		text-decoration: none;
+		font-size: 1.15rem;
+		letter-spacing: 0.02em;
+		color: var(--color-text);
 	}
 
 	.links {
 		display: flex;
-		gap: 1.5rem;
+		gap: var(--space-6);
 	}
+
 	.links a {
-		text-decoration: none;
-		position: relative;
+		font-family: var(--font-body);
+		font-weight: 500;
+		color: var(--color-text);
+		transition: opacity var(--transition-fast);
 	}
 
-	.navbar {
-		position: sticky;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0 1.5rem;
-		height: 64px;
-		backdrop-filter: blur(10px) saturate(180%);
-		background: var(--color-navbar-bg, rgb(255 255 255 / 60%));
-		z-index: 1000;
+	.links a:hover {
+		opacity: 0.7;
+		text-decoration: none;
+	}
 
-		.brand {
-			font-family: var(--font-heading, 'Merriweather', serif);
-			font-weight: 700;
-			font-size: 1.25rem;
-			color: var(--color-text, #001a33);
-			letter-spacing: 0.5px;
-			text-decoration: none;
-			display: flex;
-			align-items: baseline;
-		}
-
-		.links {
-			display: flex;
-			gap: 1.5rem;
-			align-items: center;
-		}
-
-		a {
-			font-family: var(--font-body, 'Inter', sans-serif);
-			font-weight: 500;
-			color: #001a33;
-			text-decoration: none;
-			position: relative;
-			transition: opacity 0.2s ease;
-		}
-
-		a:hover {
-			opacity: 0.7;
-		}
-
-		@media (width <= 600px) {
-			.links {
-				gap: 1rem;
-			}
+	@media (prefers-reduced-motion: reduce) {
+		.navbar {
+			transition: none;
 		}
 	}
 </style>
