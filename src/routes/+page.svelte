@@ -13,6 +13,7 @@
 	const categoryLabels: Record<HighlightCategory, string> = {
 		travel: 'Travel',
 		animals: 'Animals',
+		food: 'Food',
 		life: 'Slice of Life'
 	};
 
@@ -20,6 +21,7 @@
 		{ key: 'all', label: 'All' },
 		{ key: 'travel', label: 'Travel' },
 		{ key: 'animals', label: 'Animals' },
+		{ key: 'food', label: 'Food' },
 		{ key: 'life', label: 'Slice of Life' }
 	];
 
