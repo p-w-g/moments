@@ -66,8 +66,6 @@
 </svelte:head>
 
 <div class="highlight-layout" on:touchstart={handleTouchStart} on:touchend={handleTouchEnd}>
-	<a class="back" href="/#work">← Work</a>
-
 	{#if prevHref}
 		<a class="edge prev" href={prevHref} aria-label="Previous photo">‹</a>
 	{/if}
@@ -101,22 +99,6 @@
 <style>
 	.highlight-layout {
 		position: relative;
-	}
-
-	.back {
-		position: absolute;
-		top: var(--space-4);
-		left: var(--space-4);
-		z-index: 10;
-		font-family: var(--font-body);
-		font-size: 0.9rem;
-		color: var(--color-muted);
-	}
-
-	.back:hover,
-	.back:focus-visible {
-		color: var(--color-text);
-		text-decoration: none;
 	}
 
 	.edge {

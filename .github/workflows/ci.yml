@@ -25,3 +25,22 @@ jobs:
       - run: npm run lint
       - run: npm run check
       - run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      # Pulled from repo secrets rather than hardcoded here: the value ships
+      # to the client bundle on the deployed site regardless, but there's no
+      # reason to also leave it sitting in a public repo file for anything
+      # scraping GitHub for Sanity project IDs to hit the API with.
+      PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID }}
+      PUBLIC_SANITY_DATASET: ${{ secrets.PUBLIC_SANITY_DATASET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
