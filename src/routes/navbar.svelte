@@ -27,11 +27,7 @@
 </script>
 
 <header class="navbar" role="navigation" aria-label="Site" class:hidden>
-	<a class="brand" href="/">moments</a>
-
-	<nav class="links">
-		<a href="/#gallery">Gallery</a>
-	</nav>
+	<a class="back" href="/#work">← Work</a>
 </header>
 
 <style>
@@ -42,7 +38,6 @@
 		z-index: 100;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		height: var(--nav-height);
 		padding-inline: var(--space-6);
 		background: var(--frost-fill);
@@ -54,27 +49,15 @@
 		transform: translateY(-100%);
 	}
 
-	.brand {
-		font-family: var(--font-heading);
-		font-weight: 700;
-		font-size: 1.15rem;
-		letter-spacing: 0.02em;
-		color: var(--color-text);
-	}
-
-	.links {
-		display: flex;
-		gap: var(--space-6);
-	}
-
-	.links a {
+	.back {
 		font-family: var(--font-body);
 		font-weight: 500;
 		color: var(--color-text);
 		transition: opacity var(--transition-fast);
 	}
 
-	.links a:hover {
+	.back:hover,
+	.back:focus-visible {
 		opacity: 0.7;
 		text-decoration: none;
 	}
