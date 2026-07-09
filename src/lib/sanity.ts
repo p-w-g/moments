@@ -2,9 +2,21 @@ import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } from '$env/static/public';
 
+// Fails loudly and specifically at import time — every route that loads
+// data imports this module, so a missing/blank env var (e.g. not set for
+// the Production context in Netlify, distinct from a local .env) turns
+// into an unmissable server log line instead of a bare 500 from deep
+// inside the Sanity SDK.
+if (!PUBLIC_SANITY_PROJECT_ID) {
+	throw new Error(
+		'Sanity is not configured: PUBLIC_SANITY_PROJECT_ID is missing or blank. ' +
+			'Check the Production environment variables in the Netlify site settings.'
+	);
+}
+
 export const client = createClient({
 	projectId: PUBLIC_SANITY_PROJECT_ID,
-	dataset: PUBLIC_SANITY_DATASET ?? 'production',
+	dataset: PUBLIC_SANITY_DATASET || 'production',
 	apiVersion: '2024-01-01',
 	useCdn: true
 });

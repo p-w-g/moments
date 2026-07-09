@@ -16,15 +16,18 @@
 		});
 	});
 
-	// The landing page has its own overlay nav (see +page.svelte's hero),
-	// so the sitewide frosted Navbar only applies to other routes.
+	// The landing page has its own overlay nav (see +page.svelte's hero) and
+	// the error page has its own "back to moments" link — the sitewide
+	// frosted Navbar (a highlight-page "back to work" control) would be a
+	// non-sequitur on either, so it's scoped to just the highlight route.
 	$: isLanding = $page.url.pathname === '/';
+	$: showNavbar = !isLanding && !$page.error;
 </script>
 
-{#if !isLanding}
+{#if showNavbar}
 	<Navbar />
 {/if}
-<main class:landing={isLanding}>
+<main class:landing={!showNavbar}>
 	<slot />
 </main>
 
