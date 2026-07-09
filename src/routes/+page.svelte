@@ -8,14 +8,16 @@
 	const heroWidths = [640, 1080, 1400, 1920, 2400, 3200];
 
 	const tagLabels: Record<HighlightCategory, string> = {
-		travel: 'Travel',
+		landmark: 'Landmark',
+		nature: 'Nature',
 		animals: 'Animals',
 		food: 'Food',
 		life: 'Slice of Life'
 	};
 
 	const tagOptions: { key: HighlightCategory; label: string }[] = [
-		{ key: 'travel', label: 'Travel' },
+		{ key: 'landmark', label: 'Landmark' },
+		{ key: 'nature', label: 'Nature' },
 		{ key: 'animals', label: 'Animals' },
 		{ key: 'food', label: 'Food' },
 		{ key: 'life', label: 'Slice of Life' }
@@ -161,7 +163,10 @@
 					<div class="card-caption">
 						<div class="caption-text">{highlight.caption ?? highlight.title}</div>
 						<div class="caption-category">
-							{highlight.tags.map((t) => tagLabels[t]).join(' · ')}
+							{highlight.tags
+								.filter((t) => t in tagLabels)
+								.map((t) => tagLabels[t])
+								.join(' · ')}
 						</div>
 					</div>
 				</a>

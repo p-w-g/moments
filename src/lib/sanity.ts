@@ -34,7 +34,7 @@ export interface SanityImage {
 	};
 }
 
-export type HighlightCategory = 'travel' | 'animals' | 'food' | 'life';
+export type HighlightCategory = 'landmark' | 'nature' | 'animals' | 'food' | 'life';
 
 export interface Highlight {
 	_id: string;
