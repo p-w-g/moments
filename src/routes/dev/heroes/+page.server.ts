@@ -19,7 +19,7 @@ interface HeroCandidate {
 export const load = async () => {
 	if (!dev) throw error(404);
 
-	if (!env.SANITY_API_READ_TOKEN) {
+	if (!env.SANITY_API_EDITOR_TOKEN) {
 		return { candidates: [] as HeroCandidate[], missingToken: true };
 	}
 
@@ -29,7 +29,7 @@ export const load = async () => {
 		apiVersion: '2024-01-01',
 		useCdn: false,
 		perspective: 'drafts',
-		token: env.SANITY_API_READ_TOKEN
+		token: env.SANITY_API_EDITOR_TOKEN
 	});
 
 	const candidates: HeroCandidate[] = await draftsClient.fetch(

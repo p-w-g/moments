@@ -26,9 +26,9 @@
 
 	{#if data.missingToken}
 		<p class="notice">
-			No <code>SANITY_API_READ_TOKEN</code> set in <code>.env</code> — drafts can't be fetched.
-			Create a Viewer token in Sanity → manage → API, then add it as
-			<code>SANITY_API_READ_TOKEN=...</code>.
+			No <code>SANITY_API_EDITOR_TOKEN</code> set in <code>.env</code> — drafts can't be fetched.
+			Create an Editor (read+write) token in Sanity → manage → API, then add it as
+			<code>SANITY_API_EDITOR_TOKEN=...</code>.
 		</p>
 	{:else if data.candidates.length === 0}
 		<p class="notice">
