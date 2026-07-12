@@ -15,12 +15,15 @@
 		{ key: '2k-desktop', label: '2K desktop', width: 2560, height: 1440 }
 	];
 
-	// Visual card width, same for every device so the row lines up — each
-	// iframe is a real browsing context at the device's true viewport size
-	// (so vw/vh-based styles resolve correctly inside it), then scaled down
-	// to fit here. A plain scaled <div> can't do this: vw/vh resolve against
-	// the actual browser viewport, not a transformed element.
-	const displayWidth = 320;
+	// Common display *height*, not width — the desktop devices are landscape,
+	// so a shared width made them tiny (320x200 at displayWidth 320). 600px
+	// keeps every frame legible; the row wraps (see .devices) rather than
+	// forcing 3-across, since a readable stack beats a cramped single row.
+	// Each iframe is a real browsing context at the device's true viewport
+	// size (so vw/vh-based styles resolve correctly inside it), then scaled
+	// down to fit here — a plain scaled <div> can't do this, since vw/vh
+	// resolve against the actual browser viewport, not a transformed element.
+	const displayHeight = 600;
 </script>
 
 <svelte:head>
@@ -56,8 +59,8 @@
 						<p class="device-label">{device.label} · {device.width}×{device.height}</p>
 						<div
 							class="device-frame"
-							style="width: {displayWidth}px; height: {(displayWidth / device.width) *
-								device.height}px;"
+							style="width: {(displayHeight / device.height) *
+								device.width}px; height: {displayHeight}px;"
 						>
 							<iframe
 								class="device-iframe"
@@ -66,7 +69,7 @@
 								height={device.height}
 								loading="lazy"
 								title="{candidate.title} — {device.label} preview"
-								style="transform: scale({displayWidth / device.width});"
+								style="transform: scale({displayHeight / device.height});"
 							></iframe>
 						</div>
 					</div>
