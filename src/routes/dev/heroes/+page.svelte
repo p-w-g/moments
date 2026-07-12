@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { urlFor } from '$lib/sanity';
-
 	export let data: {
 		candidates: {
 			_id: string;
@@ -11,9 +9,18 @@
 		missingToken: boolean;
 	};
 
-	const eyebrow = 'Travel · Food · Everyday Life';
-	const subcopy =
-		'A working photo journal — cities at odd hours, the animals in them, and the small moments in between.';
+	const devices = [
+		{ key: 'mobile', label: 'Mobile', width: 390, height: 844 },
+		{ key: 'small-desktop', label: 'Small desktop', width: 1280, height: 800 },
+		{ key: '2k-desktop', label: '2K desktop', width: 2560, height: 1440 }
+	];
+
+	// Visual card width, same for every device so the row lines up — each
+	// iframe is a real browsing context at the device's true viewport size
+	// (so vw/vh-based styles resolve correctly inside it), then scaled down
+	// to fit here. A plain scaled <div> can't do this: vw/vh resolve against
+	// the actual browser viewport, not a transformed element.
+	const displayWidth = 320;
 </script>
 
 <svelte:head>
@@ -43,21 +50,27 @@
 				<span>{candidate.title}</span>
 				{#if candidate.isDraft}<span class="badge">draft</span>{/if}
 			</div>
-			<div class="hero">
-				{#if candidate.image?.asset}
-					<img
-						class="hero-image"
-						src={urlFor(candidate.image).width(2400).auto('format').quality(80).url()}
-						alt={candidate.image.alt ?? ''}
-						loading="lazy"
-					/>
-				{/if}
-				<div class="hero-scrim" aria-hidden="true"></div>
-				<div class="hero-content">
-					<p class="eyebrow">{eyebrow}</p>
-					<h2>Frames from<br />the road.</h2>
-					<p class="subcopy">{subcopy}</p>
-				</div>
+			<div class="devices">
+				{#each devices as device (device.key)}
+					<div class="device">
+						<p class="device-label">{device.label} · {device.width}×{device.height}</p>
+						<div
+							class="device-frame"
+							style="width: {displayWidth}px; height: {(displayWidth / device.width) *
+								device.height}px;"
+						>
+							<iframe
+								class="device-iframe"
+								src="/dev/heroes/frame/{candidate._id}"
+								width={device.width}
+								height={device.height}
+								loading="lazy"
+								title="{candidate.title} — {device.label} preview"
+								style="transform: scale({displayWidth / device.width});"
+							></iframe>
+						</div>
+					</div>
+				{/each}
 			</div>
 		</section>
 	{/each}
@@ -112,65 +125,29 @@
 		border-radius: 999px;
 	}
 
-	.hero {
+	.devices {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+	}
+
+	.device-label {
+		font-size: 11px;
+		letter-spacing: 0.04em;
+		color: rgba(245, 242, 236, 0.5);
+		margin: 0 0 6px;
+	}
+
+	.device-frame {
 		position: relative;
-		width: 100%;
-		height: 90vh;
-		min-height: 560px;
 		overflow: hidden;
 		border-radius: 4px;
+		border: 1px solid rgba(245, 242, 236, 0.12);
 	}
 
-	.hero-image {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: center 30%;
-	}
-
-	.hero-scrim {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(
-			180deg,
-			rgba(14, 13, 12, 0.25) 0%,
-			rgba(14, 13, 12, 0.05) 32%,
-			rgba(14, 13, 12, 0.85) 100%
-		);
-	}
-
-	.hero-content {
-		position: absolute;
-		left: 48px;
-		right: 48px;
-		bottom: 56px;
-		max-width: 640px;
-	}
-
-	.eyebrow {
-		font-size: 13px;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: #d98a3d;
-		margin: 0;
-	}
-
-	.hero-content h2 {
-		margin: 18px 0 0;
-		font-size: clamp(40px, 6vw, 84px);
-		line-height: 1.03;
-		font-weight: 400;
-		letter-spacing: -0.01em;
-		color: #f5f2ec;
-	}
-
-	.hero-content .subcopy {
-		margin: 20px 0 0;
-		font-size: 17px;
-		line-height: 1.6;
-		color: rgba(245, 242, 236, 0.68);
-		max-width: 440px;
+	.device-iframe {
+		border: 0;
+		display: block;
+		transform-origin: top left;
 	}
 </style>

@@ -16,12 +16,15 @@
 		});
 	});
 
-	// The landing page has its own overlay nav (see +page.svelte's hero) and
-	// the error page has its own "back to moments" link — the sitewide
-	// frosted Navbar (a highlight-page "back to work" control) would be a
-	// non-sequitur on either, so it's scoped to just the highlight route.
+	// The landing page has its own overlay nav (see +page.svelte's hero), the
+	// error page has its own "back to moments" link, and hero frame previews
+	// are meant to fill an iframe at an exact device viewport size with zero
+	// chrome — the sitewide frosted Navbar (a highlight-page "back to work"
+	// control) would be a non-sequitur on any of them, so it's scoped to
+	// just the highlight route.
 	$: isLanding = $page.url.pathname === '/';
-	$: showNavbar = !isLanding && !$page.error;
+	$: isHeroFrame = $page.url.pathname.startsWith('/dev/heroes/frame/');
+	$: showNavbar = !isLanding && !isHeroFrame && !$page.error;
 </script>
 
 {#if showNavbar}
