@@ -1,27 +1,24 @@
 <script lang="ts">
 	import { jsonLdScriptTag } from '$lib/jsonLd';
-	import { urlFor, type Highlight, type HighlightCategory, type SanityImage } from '$lib/sanity';
+	import { urlFor, type Highlight, type SanityImage } from '$lib/sanity';
 	import GalleryImage from '$lib/GalleryImage.svelte';
 
 	export let data: { highlights: Highlight[]; heroImage: SanityImage | null };
 
 	const heroWidths = [640, 1080, 1400, 1920, 2400, 3200];
 
-	const tagLabels: Record<HighlightCategory, string> = {
-		landmark: 'Landmark',
-		nature: 'Nature',
-		animals: 'Animals',
-		food: 'Food',
-		life: 'Slice of Life'
-	};
-
-	const tagOptions: { key: HighlightCategory; label: string }[] = [
-		{ key: 'landmark', label: 'Landmark' },
-		{ key: 'nature', label: 'Nature' },
-		{ key: 'animals', label: 'Animals' },
-		{ key: 'food', label: 'Food' },
-		{ key: 'life', label: 'Slice of Life' }
-	];
+	// Categories are editor-managed in Studio, not hardcoded — derive the filter
+	// chips from whatever categories are actually in use, in their Studio order.
+	// A highlight can reference a category that no longer exists (dangling ref),
+	// which dereferences to null — filter those out rather than crash.
+	$: tagOptions = Array.from(
+		new Map(
+			data.highlights
+				.flatMap((h) => h.tags)
+				.filter(Boolean)
+				.map((tag) => [tag.slug, tag])
+		).values()
+	).sort((a, b) => a.order - b.order);
 
 	$: heroImage = data.heroImage;
 	$: heroSrc = heroImage ? urlFor(heroImage).width(2400).auto('format').quality(80).url() : null;
@@ -33,15 +30,15 @@
 	$: heroAlt = heroImage?.alt ?? '';
 
 	// Selecting more tags narrows the results (intersection), not broadens them —
-	// picking Travel + Food finds moments that are both, not either.
-	let selectedTags: HighlightCategory[] = [];
-	const toggleTag = (tag: HighlightCategory) => {
+	// picking two categories finds moments that are both, not either.
+	let selectedTags: string[] = [];
+	const toggleTag = (tag: string) => {
 		selectedTags = selectedTags.includes(tag)
 			? selectedTags.filter((t) => t !== tag)
 			: [...selectedTags, tag];
 	};
 	$: visibleHighlights = data.highlights.filter((h) =>
-		selectedTags.every((tag) => h.tags.includes(tag))
+		selectedTags.every((tag) => h.tags.some((t) => t?.slug === tag))
 	);
 
 	const description =
@@ -138,15 +135,15 @@
 				>
 					All
 				</button>
-				{#each tagOptions as tag (tag.key)}
+				{#each tagOptions as tag (tag.slug)}
 					<button
 						type="button"
 						class="chip"
-						class:active={selectedTags.includes(tag.key)}
-						aria-pressed={selectedTags.includes(tag.key)}
-						on:click={() => toggleTag(tag.key)}
+						class:active={selectedTags.includes(tag.slug)}
+						aria-pressed={selectedTags.includes(tag.slug)}
+						on:click={() => toggleTag(tag.slug)}
 					>
-						{tag.label}
+						{tag.title}
 					</button>
 				{/each}
 			</div>
@@ -164,8 +161,8 @@
 						<div class="caption-text">{highlight.caption ?? highlight.title}</div>
 						<div class="caption-category">
 							{highlight.tags
-								.filter((t) => t in tagLabels)
-								.map((t) => tagLabels[t])
+								.filter(Boolean)
+								.map((t) => t.title)
 								.join(' · ')}
 						</div>
 					</div>

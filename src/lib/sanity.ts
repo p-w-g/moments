@@ -46,13 +46,17 @@ export interface SanityImage {
 	};
 }
 
-export type HighlightCategory = 'landmark' | 'nature' | 'animals' | 'food' | 'life';
+export interface Category {
+	title: string;
+	slug: string;
+	order: number;
+}
 
 export interface Highlight {
 	_id: string;
 	title: string;
 	slug: string;
-	tags: HighlightCategory[];
+	tags: Category[];
 	caption?: string;
 	image: SanityImage;
 }
