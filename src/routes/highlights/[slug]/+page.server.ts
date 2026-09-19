@@ -12,7 +12,6 @@ export const load = async ({ params }) => {
         alt,
         asset->{
           _id,
-          url,
           metadata{ lqip, dimensions{ width, height }, exif }
         }
       }
