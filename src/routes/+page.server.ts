@@ -12,7 +12,6 @@ const highlightsQuery = `*[_type=="highlight"]|order(_createdAt desc){
 		alt,
 		asset->{
 			_id,
-			url,
 			metadata{ lqip, dimensions{ width, height } }
 		}
 	}
@@ -23,7 +22,6 @@ const heroPoolQuery = `*[_type=="highlight" && isHero==true]{
 		alt,
 		asset->{
 			_id,
-			url,
 			metadata{ lqip, dimensions{ width, height } }
 		}
 	}
